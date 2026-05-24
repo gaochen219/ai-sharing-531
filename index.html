@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI 如何重构智慧场景 · Chen Gao · 高晨</title>
+<meta name="description" content="15 分钟 AI 主题分享 — 智慧 = AI 重构场景的能力。Chen Gao · 高晨 / GLP VP · Big Data & AI" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@200;300;400;500;700;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-0: #03050d;
+    --bg-1: #060a18;
+    --bg-2: #0b1226;
+    --ink-0: #eaf6ff;
+    --ink-1: #b8c8e0;
+    --ink-2: #6b7a96;
+    --ink-3: #3e4a66;
+    --cyan: #00f0ff;
+    --cyan-soft: #6cf3ff;
+    --magenta: #ff2bd6;
+    --magenta-soft: #ffa1ec;
+    --lime: #c2ff3d;
+    --gold: #ffc857;
+    --red: #ff5470;
+    --grid: rgba(0, 240, 255, 0.06);
+    --grid-strong: rgba(0, 240, 255, 0.14);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: var(--bg-0);
+    color: var(--ink-0);
+    font-family: "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* ============ Global background ============ */
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+  .bg-glow {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(circle at 18% 22%, rgba(0, 240, 255, 0.18) 0%, transparent 38%),
+      radial-gradient(circle at 82% 78%, rgba(255, 43, 214, 0.14) 0%, transparent 42%),
+      radial-gradient(ellipse at 50% 100%, rgba(0, 240, 255, 0.08) 0%, transparent 55%);
+  }
+  .bg-scan {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.012) 0px,
+      rgba(255,255,255,0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: overlay;
+  }
+  .bg-noise {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.05;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: overlay;
+  }
+  canvas#particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.55; }
+
+  /* ============ Slide system ============ */
+  .deck { position: relative; width: 100vw; height: 100vh; z-index: 2; }
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 6vh 7vw;
+    opacity: 0; pointer-events: none;
+    transform: scale(0.985);
+    transition: opacity .55s ease, transform .55s ease;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; transform: scale(1); }
+  .slide.prev { transform: scale(1.01); }
+
+  /* ============ Chrome (top + bottom bars) ============ */
+  .chrome-top {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 32px; font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px; color: var(--ink-2); letter-spacing: 2px;
+  }
+  .chrome-top .left { display: flex; align-items: center; gap: 14px; }
+  .chrome-top .left .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); animation: pulse 1.6s infinite; }
+  .chrome-top .left .label { color: var(--cyan); }
+  .chrome-top .right { display: flex; gap: 22px; }
+  .chrome-top .right span { color: var(--ink-3); }
+  .chrome-top .right .now { color: var(--ink-1); }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .chrome-bottom {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 32px 22px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; color: var(--ink-3); letter-spacing: 2px;
+  }
+  .chrome-bottom .ticks { display: flex; gap: 5px; align-items: center; }
+  .chrome-bottom .ticks .tk { width: 24px; height: 2px; background: var(--ink-3); opacity: .4; transition: all .3s; cursor: pointer; }
+  .chrome-bottom .ticks .tk.active { background: var(--cyan); opacity: 1; height: 3px; box-shadow: 0 0 8px var(--cyan); }
+  .chrome-bottom .ticks .tk.done { background: var(--cyan); opacity: 0.55; }
+  .chrome-bottom .hint { color: var(--ink-3); font-size: 9.5px; }
+  .chrome-bottom .hint kbd {
+    color: var(--cyan-soft); border: 1px solid rgba(0,240,255,0.3);
+    padding: 1px 5px; border-radius: 3px; font-family: "JetBrains Mono", monospace;
+    font-size: 9px; margin: 0 2px;
+  }
+
+  /* ============ Typography helpers ============ */
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 5px; color: var(--cyan);
+    text-transform: uppercase; font-weight: 500;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before {
+    content: ''; width: 28px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan));
+  }
+  .eyebrow.center { justify-content: center; }
+  .eyebrow.center::after {
+    content: ''; width: 28px; height: 1px;
+    background: linear-gradient(90deg, var(--cyan), transparent);
+  }
+  h1.mega {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 800; font-size: clamp(56px, 8.2vw, 132px);
+    line-height: 0.96; letter-spacing: -2px;
+    background: linear-gradient(180deg, #ffffff 0%, #88c8ff 50%, #00f0ff 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  h2.title {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 800; font-size: clamp(40px, 5.6vw, 84px);
+    line-height: 1.05; letter-spacing: -1.5px;
+    color: var(--ink-0);
+  }
+  h2.title em {
+    font-style: normal;
+    background: linear-gradient(120deg, var(--cyan) 0%, var(--magenta) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  h3.sub {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 300; font-size: clamp(18px, 1.6vw, 24px);
+    color: var(--ink-1); line-height: 1.5; letter-spacing: 0.5px;
+  }
+  .mono { font-family: "JetBrains Mono", monospace; }
+  .orbi { font-family: "Orbitron", "Inter", sans-serif; letter-spacing: 4px; }
+  .text-cyan { color: var(--cyan); }
+  .text-mag { color: var(--magenta); }
+  .text-lime { color: var(--lime); }
+  .text-gold { color: var(--gold); }
+  .text-mute { color: var(--ink-2); }
+
+  /* ============ Slide 1 — Cover ============ */
+  .cover {
+    text-align: center; gap: 32px;
+  }
+  .cover .logo-mark {
+    width: 78px; height: 78px; border-radius: 50%;
+    border: 1px solid rgba(0,240,255,0.4);
+    display: grid; place-items: center;
+    font-family: "Orbitron", sans-serif; font-weight: 700;
+    font-size: 22px; color: var(--cyan); letter-spacing: 2px;
+    position: relative;
+    box-shadow: 0 0 24px rgba(0,240,255,0.2), inset 0 0 24px rgba(0,240,255,0.06);
+  }
+  .cover .logo-mark::before, .cover .logo-mark::after {
+    content: ''; position: absolute; border-radius: 50%;
+    border: 1px solid rgba(0,240,255,0.18);
+  }
+  .cover .logo-mark::before { inset: -10px; }
+  .cover .logo-mark::after { inset: -22px; border-color: rgba(0,240,255,0.08); }
+  .cover .topic-en {
+    font-family: "Orbitron", sans-serif; font-size: 14px; letter-spacing: 12px;
+    color: var(--cyan); font-weight: 500; text-transform: uppercase;
+  }
+  .cover h1 { margin: 12px 0 20px; }
+  .cover .h-line {
+    display: flex; align-items: center; gap: 18px;
+    color: var(--ink-2); font-size: 12px; letter-spacing: 4px; font-family: "JetBrains Mono", monospace;
+    margin-top: 12px;
+  }
+  .cover .h-line .bar { width: 56px; height: 1px; background: var(--ink-3); }
+  .cover .meta-row {
+    display: flex; gap: 56px; margin-top: 56px;
+    color: var(--ink-2); font-family: "JetBrains Mono", monospace; font-size: 11px;
+    letter-spacing: 2px;
+  }
+  .cover .meta-row .k { color: var(--ink-3); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px; }
+  .cover .meta-row .v { color: var(--ink-1); }
+
+  /* corner brackets */
+  .brackets::before, .brackets::after,
+  .brackets > .br-tl, .brackets > .br-tr, .brackets > .br-bl, .brackets > .br-br {
+    position: absolute; width: 28px; height: 28px;
+    border-color: var(--cyan); border-style: solid; border-width: 0; opacity: 0.8;
+  }
+  .brackets::before { content: ''; top: 32px; left: 32px; border-top-width: 1px; border-left-width: 1px; }
+  .brackets::after { content: ''; top: 32px; right: 32px; border-top-width: 1px; border-right-width: 1px; }
+  .brackets .br-bl { bottom: 56px; left: 32px; border-bottom-width: 1px; border-left-width: 1px; }
+  .brackets .br-br { bottom: 56px; right: 32px; border-bottom-width: 1px; border-right-width: 1px; }
+
+  /* ============ Slide 2 — Hook ============ */
+  .hook {
+    align-items: flex-start; justify-content: center;
+    text-align: left; max-width: 1200px; margin: 0 auto; width: 100%;
+  }
+  .hook .lead {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 200; font-size: clamp(32px, 4vw, 56px);
+    line-height: 1.25; color: var(--ink-1);
+    margin: 24px 0;
+  }
+  .hook .lead .hl { color: var(--ink-0); font-weight: 600; }
+  .hook .lead .key { color: var(--cyan); font-weight: 700; position: relative; }
+  .hook .lead .key::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  }
+  .hook .footnote {
+    margin-top: 28px; color: var(--ink-2); font-size: 14px; letter-spacing: 1px;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  /* ============ Slide 3 — About me ============ */
+  .about {
+    flex-direction: row; gap: 64px; align-items: center;
+    max-width: 1280px; width: 100%; margin: 0 auto;
+  }
+  .about .left { flex: 1; display: flex; flex-direction: column; gap: 18px; }
+  .about .left .name-row { display: flex; align-items: baseline; gap: 18px; }
+  .about .left h2 {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 800; font-size: 76px; letter-spacing: -1.5px;
+    background: linear-gradient(180deg, #ffffff, #00f0ff);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .about .left .en {
+    font-family: "Orbitron", sans-serif; font-size: 16px;
+    letter-spacing: 5px; color: var(--ink-2); text-transform: uppercase;
+  }
+  .about .left .title-now {
+    font-family: "JetBrains Mono", monospace; font-size: 14px;
+    color: var(--cyan); letter-spacing: 2px; margin-top: 4px;
+  }
+  .about .left .bio { color: var(--ink-1); font-size: 18px; line-height: 1.75; max-width: 560px; }
+  .about .left .bio strong { color: var(--ink-0); font-weight: 600; }
+  .about .right { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .stat-cell {
+    border: 1px solid rgba(0,240,255,0.18);
+    background: linear-gradient(180deg, rgba(0,240,255,0.04), transparent);
+    padding: 24px 18px; position: relative; overflow: hidden;
+  }
+  .stat-cell::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0.5;
+  }
+  .stat-cell .num {
+    font-family: "Orbitron", sans-serif; font-weight: 700;
+    font-size: 56px; line-height: 1; color: var(--cyan);
+    text-shadow: 0 0 24px rgba(0,240,255,0.4);
+  }
+  .stat-cell .label {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    letter-spacing: 2px; color: var(--ink-2); margin-top: 10px; text-transform: uppercase;
+  }
+  .stat-cell .label .cn { display: block; color: var(--ink-1); margin-top: 4px; font-size: 11px; letter-spacing: 1px; }
+  .stat-cell.span2 { grid-column: span 3; padding: 18px 22px; }
+  .stat-cell .industries {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px;
+  }
+  .stat-cell .industries .chip {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; color: var(--ink-1); padding: 4px 10px;
+    border: 1px solid rgba(0,240,255,0.22); border-radius: 999px;
+    letter-spacing: 1px;
+  }
+
+  /* ============ Slide 4 — Thesis ============ */
+  .thesis {
+    text-align: center; gap: 28px;
+  }
+  .thesis .equation {
+    display: flex; align-items: center; gap: 28px; margin-top: 32px;
+    font-family: "Inter", "Noto Sans SC", sans-serif; font-weight: 200;
+    font-size: clamp(56px, 8vw, 132px); letter-spacing: -2px;
+  }
+  .thesis .equation .word { display: inline-block; padding: 0 8px; }
+  .thesis .equation .smart { color: var(--ink-0); font-weight: 700; }
+  .thesis .equation .eq { color: var(--ink-3); font-weight: 200; }
+  .thesis .equation .ai {
+    font-weight: 900;
+    background: linear-gradient(120deg, var(--cyan) 0%, var(--magenta) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 0 60px rgba(0,240,255,0.3);
+  }
+  .thesis .sub-line {
+    margin-top: 28px; color: var(--ink-1); font-size: clamp(20px, 2.2vw, 32px);
+    font-weight: 300; line-height: 1.5; max-width: 920px;
+  }
+  .thesis .sub-line .hl { color: var(--cyan); font-weight: 500; }
+  .thesis .footer-note {
+    margin-top: 56px; color: var(--ink-3); font-size: 12px;
+    font-family: "JetBrains Mono", monospace; letter-spacing: 3px;
+  }
+
+  /* ============ Slide 5 — AI Capabilities ============ */
+  .caps {
+    flex-direction: column; gap: 36px; align-items: stretch;
+    max-width: 1280px; width: 100%; margin: 0 auto;
+  }
+  .caps .header { text-align: center; }
+  .caps .grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  .cap-card {
+    position: relative; padding: 32px 28px;
+    border: 1px solid rgba(0,240,255,0.18);
+    background: linear-gradient(180deg, rgba(0,240,255,0.05), transparent);
+    overflow: hidden;
+    transition: all .35s;
+  }
+  .cap-card:hover { border-color: rgba(0,240,255,0.5); transform: translateY(-4px); }
+  .cap-card .num {
+    font-family: "Orbitron", sans-serif; font-weight: 700;
+    font-size: 14px; color: var(--cyan); letter-spacing: 3px;
+  }
+  .cap-card .icon {
+    font-family: "JetBrains Mono", monospace; font-size: 40px;
+    color: var(--cyan); margin: 16px 0 12px; line-height: 1;
+  }
+  .cap-card h4 {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 700; font-size: 28px; color: var(--ink-0); letter-spacing: -0.5px;
+  }
+  .cap-card .en {
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--ink-2); letter-spacing: 2px; margin-top: 4px; text-transform: uppercase;
+  }
+  .cap-card p {
+    margin-top: 18px; color: var(--ink-1); font-size: 14px; line-height: 1.7;
+  }
+  .cap-card .examples {
+    margin-top: 18px; padding-top: 14px; border-top: 1px dashed rgba(0,240,255,0.16);
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--ink-2); letter-spacing: 1px; line-height: 1.7;
+  }
+  .cap-card .examples b { color: var(--cyan-soft); font-weight: 500; }
+  .caps .footer {
+    text-align: center; margin-top: 8px; color: var(--ink-1);
+    font-size: 18px; font-weight: 300; line-height: 1.6;
+  }
+  .caps .footer .arrow {
+    display: inline-block; color: var(--cyan); margin: 0 8px;
+  }
+  .caps .footer b {
+    color: var(--cyan); font-weight: 600;
+  }
+
+  /* ============ Slide 6-10 — Case slide template ============ */
+  .case {
+    flex-direction: column; align-items: stretch; gap: 24px;
+    max-width: 1280px; width: 100%; margin: 0 auto;
+  }
+  .case .case-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; }
+  .case .case-head .left {}
+  .case .case-head .case-no {
+    font-family: "Orbitron", sans-serif; font-size: 13px;
+    color: var(--cyan); letter-spacing: 5px; margin-bottom: 12px;
+  }
+  .case .case-head h2 {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 800; font-size: clamp(40px, 5vw, 64px);
+    letter-spacing: -1px; color: var(--ink-0); line-height: 1.05;
+  }
+  .case .case-head h2 em {
+    font-style: normal;
+    background: linear-gradient(120deg, var(--cyan), var(--magenta));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .case .case-head .ind-chip {
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    padding: 8px 14px; border: 1px solid var(--cyan);
+    color: var(--cyan); letter-spacing: 3px; white-space: nowrap;
+  }
+  .case .body {
+    display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 18px;
+    margin-top: 12px;
+  }
+  .case .panel {
+    padding: 24px 22px; border: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
+    position: relative;
+  }
+  .case .panel .step {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    letter-spacing: 3px; color: var(--ink-3); text-transform: uppercase;
+  }
+  .case .panel h4 {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 700; font-size: 22px; color: var(--ink-0);
+    margin-top: 10px; margin-bottom: 14px;
+  }
+  .case .panel p {
+    color: var(--ink-1); font-size: 14px; line-height: 1.75;
+  }
+  .case .panel.problem { border-left: 2px solid var(--red); }
+  .case .panel.problem .step { color: var(--red); }
+  .case .panel.solution { border-left: 2px solid var(--cyan); }
+  .case .panel.solution .step { color: var(--cyan); }
+  .case .panel.result { border-left: 2px solid var(--lime); background: linear-gradient(180deg, rgba(194,255,61,0.05), transparent); }
+  .case .panel.result .step { color: var(--lime); }
+
+  .case .panel ul { list-style: none; }
+  .case .panel ul li {
+    color: var(--ink-1); font-size: 14px; line-height: 1.8; padding-left: 16px;
+    position: relative;
+  }
+  .case .panel ul li::before {
+    content: '▸'; position: absolute; left: 0; color: var(--cyan); font-size: 11px;
+  }
+
+  .case .panel.result .metrics {
+    display: flex; flex-wrap: wrap; gap: 18px 24px; margin-top: 4px;
+  }
+  .case .panel.result .metric { display: flex; flex-direction: column; min-width: 120px; }
+  .case .panel.result .metric .v {
+    font-family: "Orbitron", sans-serif; font-weight: 700;
+    font-size: 32px; color: var(--lime); line-height: 1;
+    text-shadow: 0 0 18px rgba(194,255,61,0.4);
+  }
+  .case .panel.result .metric .v .unit { font-size: 14px; margin-left: 4px; color: var(--ink-1); }
+  .case .panel.result .metric .v .arrow { color: var(--lime); margin-right: 4px; }
+  .case .panel.result .metric .k {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--ink-2); letter-spacing: 1.5px; margin-top: 8px; text-transform: uppercase;
+  }
+  .case .takeaway {
+    margin-top: 16px; padding: 16px 20px;
+    border-left: 2px solid var(--gold);
+    background: linear-gradient(90deg, rgba(255,200,87,0.08), transparent);
+    color: var(--ink-1); font-size: 15px; line-height: 1.7;
+  }
+  .case .takeaway b { color: var(--gold); }
+  .case .takeaway .lbl {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--gold); letter-spacing: 3px; margin-right: 12px;
+  }
+
+  /* ============ Slide: Restaurant ============ */
+  .restaurant {
+    flex-direction: column; align-items: stretch; gap: 28px;
+    max-width: 1320px; width: 100%; margin: 0 auto;
+  }
+  .restaurant .header { text-align: center; }
+  .restaurant .grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
+  }
+  .r-card {
+    border: 1px solid rgba(255,43,214,0.2);
+    background: linear-gradient(180deg, rgba(255,43,214,0.04), transparent);
+    padding: 24px 18px; position: relative; overflow: hidden;
+    transition: all .3s;
+  }
+  .r-card:hover { transform: translateY(-4px); border-color: var(--magenta); }
+  .r-card .icon-r {
+    font-family: "Orbitron", sans-serif; font-size: 24px;
+    color: var(--magenta); font-weight: 700;
+  }
+  .r-card h4 {
+    margin-top: 14px; font-size: 18px; font-weight: 700;
+    color: var(--ink-0); letter-spacing: -0.3px; line-height: 1.3;
+  }
+  .r-card .en {
+    font-family: "JetBrains Mono", monospace; font-size: 9.5px;
+    color: var(--ink-3); letter-spacing: 2px; margin-top: 4px; text-transform: uppercase;
+  }
+  .r-card p {
+    margin-top: 14px; color: var(--ink-1); font-size: 12.5px; line-height: 1.7;
+  }
+  .r-card .tag {
+    margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(255,43,214,0.2);
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--magenta-soft); letter-spacing: 1.5px;
+  }
+  .restaurant .punchline {
+    text-align: center; margin-top: 8px; padding: 22px;
+    color: var(--ink-1); font-size: 20px; font-weight: 300;
+  }
+  .restaurant .punchline .hl {
+    color: var(--magenta); font-weight: 600;
+  }
+
+  /* ============ Slide: Framework ============ */
+  .framework {
+    flex-direction: column; gap: 36px; align-items: stretch;
+    max-width: 1280px; width: 100%; margin: 0 auto;
+  }
+  .framework .header { text-align: center; }
+  .framework .flow {
+    display: grid; grid-template-columns: 1fr 40px 1fr 40px 1fr; gap: 8px;
+    align-items: stretch;
+  }
+  .framework .step-card {
+    padding: 32px 28px; border: 1px solid rgba(0,240,255,0.2);
+    background: linear-gradient(180deg, rgba(0,240,255,0.04), transparent);
+    position: relative; min-height: 280px;
+    display: flex; flex-direction: column;
+  }
+  .framework .step-card .nm {
+    font-family: "Orbitron", sans-serif; font-weight: 700;
+    font-size: 64px; color: rgba(0,240,255,0.16); line-height: 1;
+    position: absolute; top: 14px; right: 22px;
+  }
+  .framework .step-card .step-label {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--cyan); letter-spacing: 3px;
+  }
+  .framework .step-card h4 {
+    font-size: 32px; font-weight: 800; color: var(--ink-0);
+    margin-top: 10px; letter-spacing: -0.5px;
+  }
+  .framework .step-card .en {
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--ink-3); letter-spacing: 2px; margin-top: 4px;
+  }
+  .framework .step-card p {
+    color: var(--ink-1); font-size: 14px; line-height: 1.75; margin-top: 18px;
+  }
+  .framework .step-card .quest {
+    margin-top: auto; padding-top: 16px;
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--cyan-soft); letter-spacing: 1px; line-height: 1.7;
+    border-top: 1px dashed rgba(0,240,255,0.2);
+  }
+  .framework .arrow {
+    display: grid; place-items: center;
+    color: var(--cyan); font-size: 28px; font-family: "Orbitron", sans-serif;
+  }
+
+  /* ============ Slide: Future ============ */
+  .future {
+    text-align: center; gap: 28px;
+  }
+  .future h2 {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 200; font-size: clamp(40px, 5.5vw, 80px);
+    line-height: 1.2; max-width: 1100px; color: var(--ink-0);
+  }
+  .future h2 .core {
+    font-weight: 900;
+    background: linear-gradient(120deg, var(--cyan), var(--magenta) 60%, var(--lime));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .future .triplets {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    max-width: 1080px; margin-top: 32px;
+  }
+  .future .triplet {
+    padding: 22px;
+    border: 1px solid rgba(255,255,255,0.08);
+    text-align: left;
+  }
+  .future .triplet .k {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--cyan); letter-spacing: 3px;
+  }
+  .future .triplet h5 {
+    margin-top: 8px; font-size: 20px; font-weight: 700; color: var(--ink-0);
+  }
+  .future .triplet p {
+    margin-top: 8px; color: var(--ink-1); font-size: 13px; line-height: 1.7;
+  }
+
+  /* ============ Slide: Closing ============ */
+  .closing {
+    text-align: center; gap: 28px;
+  }
+  .closing .thanks {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 800; font-size: clamp(80px, 12vw, 200px);
+    line-height: 0.96; letter-spacing: -3px;
+    background: linear-gradient(180deg, #ffffff 0%, var(--cyan) 70%, var(--magenta) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .closing .thanks-en {
+    font-family: "Orbitron", sans-serif; font-size: 16px;
+    letter-spacing: 14px; color: var(--cyan); font-weight: 500;
+    margin-top: -6px;
+  }
+  .closing .info {
+    display: grid; grid-template-columns: 1fr 1px 1fr; gap: 56px;
+    align-items: center; margin-top: 40px;
+  }
+  .closing .info .col { text-align: left; }
+  .closing .info .col.right { text-align: right; }
+  .closing .info .sep { background: rgba(0,240,255,0.18); }
+  .closing .info .k {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--ink-3); letter-spacing: 3px;
+  }
+  .closing .info .v {
+    font-size: 20px; color: var(--ink-0); margin-top: 6px; font-weight: 500;
+  }
+  .closing .info .sub {
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--ink-2); letter-spacing: 1px; margin-top: 4px;
+  }
+  .closing .qa {
+    margin-top: 24px; font-family: "JetBrains Mono", monospace; font-size: 12px;
+    color: var(--ink-2); letter-spacing: 4px; text-transform: uppercase;
+  }
+  .closing .qa span {
+    color: var(--cyan); animation: blink 1.4s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ============ Common micro animations ============ */
+  .slide.active .reveal {
+    animation: reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .slide.active .reveal-1 { animation-delay: 0.05s; }
+  .slide.active .reveal-2 { animation-delay: 0.18s; }
+  .slide.active .reveal-3 { animation-delay: 0.32s; }
+  .slide.active .reveal-4 { animation-delay: 0.46s; }
+  .slide.active .reveal-5 { animation-delay: 0.6s; }
+  .slide.active .reveal-6 { animation-delay: 0.74s; }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============ Smaller screens ============ */
+  @media (max-width: 1100px) {
+    .case .body { grid-template-columns: 1fr; }
+    .about { flex-direction: column; }
+    .about .right { width: 100%; }
+    .restaurant .grid { grid-template-columns: repeat(2, 1fr); }
+    .framework .flow { grid-template-columns: 1fr; }
+    .framework .arrow { transform: rotate(90deg); padding: 8px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="bg-scan"></div>
+<div class="bg-noise"></div>
+<canvas id="particles"></canvas>
+
+<!-- Top chrome -->
+<div class="chrome-top">
+  <div class="left">
+    <span class="dot"></span>
+    <span class="label">LIVE · 现场分享</span>
+    <span>·</span>
+    <span>AI · DATA · STRATEGY</span>
+  </div>
+  <div class="right">
+    <span class="now">2026 · 机器人餐厅开业</span>
+    <span>·</span>
+    <span id="clock">--:--:--</span>
+  </div>
+</div>
+
+<!-- Deck -->
+<div class="deck" id="deck">
+
+  <!-- ============ 1 · Cover ============ -->
+  <section class="slide cover brackets">
+    <span class="br-bl"></span><span class="br-br"></span>
+    <div class="logo-mark reveal reveal-1">CG</div>
+    <div class="topic-en reveal reveal-2">A · I · &nbsp; R E · A R C H I T E C T</div>
+    <h1 class="mega reveal reveal-3">
+      AI 如何<br/>重构智慧场景
+    </h1>
+    <div class="h-line reveal reveal-4">
+      <span class="bar"></span>
+      <span>15 MIN · KEYNOTE · 中文分享</span>
+      <span class="bar"></span>
+    </div>
+    <div class="meta-row reveal reveal-5">
+      <div><div class="k">SPEAKER</div><div class="v">Chen Gao · 高 晨</div></div>
+      <div><div class="k">ROLE</div><div class="v">VP · Big Data & AI · GLP</div></div>
+      <div><div class="k">VENUE</div><div class="v">Robot Restaurant · 开业首秀</div></div>
+    </div>
+  </section>
+
+  <!-- ============ 2 · Hook ============ -->
+  <section class="slide hook brackets">
+    <span class="br-bl"></span><span class="br-br"></span>
+    <div class="eyebrow reveal reveal-1">OPENING · 开场</div>
+    <div class="lead reveal reveal-2">
+      <span class="hl">你今天看到的</span>，是<span class="key">机器人在炒菜</span>。<br/>
+      但真正的革命，<br/>
+      不在<span class="hl">机械臂</span>上，<br/>
+      而在它<span class="key">背后做决策的 AI</span> 上。
+    </div>
+    <div class="footnote reveal reveal-3">
+      // 机器人是"执行"，AI 是"重构"。<br/>
+      // 接下来 15 分钟，我想告诉你 — AI 怎么把每一个场景重做一遍。
+    </div>
+  </section>
+
+  <!-- ============ 3 · About ============ -->
+  <section class="slide about">
+    <div class="left">
+      <div class="eyebrow reveal reveal-1">SPEAKER · 关于我</div>
+      <div class="name-row reveal reveal-2">
+        <h2>高 晨</h2>
+        <div class="en">CHEN&nbsp;GAO</div>
+      </div>
+      <div class="title-now reveal reveal-3">
+        ▸ GLP · VP · Big Data & AI（现任）<br/>
+        ▸ Ex-CDO · Decathlon China · 迪卡侬中国<br/>
+        ▸ Ex-Alibaba · 阿里巴巴（盒马 / 夸克 / 阿里云 / 天猫）
+      </div>
+      <div class="bio reveal reveal-4">
+        <strong>15+ 年</strong>跨行业的数据与 AI 实战 — 把一行行业务问题，
+        翻译成<strong class="text-cyan">可被算法重构</strong>的场景。
+      </div>
+    </div>
+    <div class="right">
+      <div class="stat-cell reveal reveal-3">
+        <div class="num">6</div>
+        <div class="label">Industries<span class="cn">跨 6 大行业</span></div>
+      </div>
+      <div class="stat-cell reveal reveal-4">
+        <div class="num">9</div>
+        <div class="label">Capabilities<span class="cn">9 个能力域</span></div>
+      </div>
+      <div class="stat-cell reveal reveal-5">
+        <div class="num">43</div>
+        <div class="label">Techniques<span class="cn">43 项技术方法</span></div>
+      </div>
+      <div class="stat-cell span2 reveal reveal-6">
+        <div class="label" style="margin-top:0">SECTORS · 跨越的行业</div>
+        <div class="industries">
+          <span class="chip">物流地产</span>
+          <span class="chip">零售</span>
+          <span class="chip">互联网 · 电商</span>
+          <span class="chip">医疗健康</span>
+          <span class="chip">高等教育</span>
+          <span class="chip">咨询</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4 · Thesis ============ -->
+  <section class="slide thesis brackets">
+    <span class="br-bl"></span><span class="br-br"></span>
+    <div class="eyebrow center reveal reveal-1">CORE THESIS · 核心论点</div>
+    <div class="equation reveal reveal-2">
+      <span class="word smart">智&nbsp;慧</span>
+      <span class="word eq">=</span>
+      <span class="word ai">A&nbsp;I</span>
+    </div>
+    <div class="sub-line reveal reveal-3">
+      不是"加一个 AI 功能"，<br/>
+      而是用 AI <span class="hl">重新定义场景里的每一个决策</span>。
+    </div>
+    <div class="footer-note reveal reveal-4">
+      // SMART = AI'S ABILITY TO RE-ARCHITECT A SCENE
+    </div>
+  </section>
+
+  <!-- ============ 5 · AI 三大能力 ============ -->
+  <section class="slide caps">
+    <div class="header">
+      <div class="eyebrow center reveal reveal-1">CAPABILITIES · AI 的三种能力</div>
+      <h2 class="title reveal reveal-2" style="margin-top:18px">让机器有 <em>感知 · 决策 · 生成</em> 的能力</h2>
+    </div>
+    <div class="grid">
+      <div class="cap-card reveal reveal-3">
+        <div class="num">01 / PERCEPTION</div>
+        <div class="icon">◉</div>
+        <h4>感知</h4>
+        <div class="en">See · Hear · Read · Understand</div>
+        <p>把物理世界的图像、声音、文字，变成机器能理解的"事实"。</p>
+        <div class="examples">
+          ▸ 视觉识别 · <b>OCR</b> · 语音<br/>
+          ▸ <b>NLP</b> · 多模态 · 行为捕捉
+        </div>
+      </div>
+      <div class="cap-card reveal reveal-4">
+        <div class="num">02 / DECISION</div>
+        <div class="icon">⬢</div>
+        <h4>决策</h4>
+        <div class="en">Predict · Optimize · Decide</div>
+        <p>从规则到学习 — 让系统替你做出比经验更好的判断。</p>
+        <div class="examples">
+          ▸ <b>预测模型</b>（XGBoost / LightGBM）<br/>
+          ▸ <b>优化</b> · 聚类 · 因果推断
+        </div>
+      </div>
+      <div class="cap-card reveal reveal-5">
+        <div class="num">03 / GENERATION</div>
+        <div class="icon">✦</div>
+        <h4>生成</h4>
+        <div class="en">Create · Compose · Interact</div>
+        <p>大模型把"自然语言"变成新交互入口，知识 + 行动可以被合成。</p>
+        <div class="examples">
+          ▸ <b>LLM</b> · RAG · Agent<br/>
+          ▸ 文本 · 图像 · 代码 · 工作流
+        </div>
+      </div>
+    </div>
+    <div class="footer reveal reveal-6">
+      规则系统 <span class="arrow">→</span> 学习系统 <span class="arrow">→</span> <b>会自己重构场景的系统</b>
+    </div>
+  </section>
+
+  <!-- ============ 6 · 案例 1: AI 选址 ============ -->
+  <section class="slide case">
+    <div class="case-head">
+      <div class="left">
+        <div class="case-no reveal reveal-1">CASE 01 / 05 · 选 址</div>
+        <h2 class="reveal reveal-2">从拍脑袋到 <em>AI 智能选址</em></h2>
+      </div>
+      <div class="ind-chip reveal reveal-2">RETAIL · 零售 · 1500+ 门店</div>
+    </div>
+    <div class="body">
+      <div class="panel problem reveal reveal-3">
+        <div class="step">▸ PROBLEM · 痛 点</div>
+        <h4>开店靠经验，开错一家亏一千万</h4>
+        <ul>
+          <li>商圈分析靠人去走</li>
+          <li>新店蚕食老店没人量化</li>
+          <li>决策周期 3-6 个月</li>
+        </ul>
+      </div>
+      <div class="panel solution reveal reveal-4">
+        <div class="step">▸ SOLUTION · 重 构</div>
+        <h4>GIS + 机器学习选址引擎</h4>
+        <ul>
+          <li>POI · 人口 · 交通 · 商圈数据融合</li>
+          <li>XGBoost 预测单店年销</li>
+          <li>蚕食效应纳入模型</li>
+        </ul>
+      </div>
+      <div class="panel result reveal reveal-5">
+        <div class="step">▸ OUTCOME · 结 果</div>
+        <h4 class="text-lime">把"赌"变成"算"</h4>
+        <div class="metrics">
+          <div class="metric"><div class="v">86<span class="unit">%</span></div><div class="k">预测准确率</div></div>
+          <div class="metric"><div class="v"><span class="arrow">↑</span>8<span class="unit">pp</span></div><div class="k">较基线提升</div></div>
+          <div class="metric"><div class="v">¥2500<span class="unit">万</span></div><div class="k">年节约 / 避损</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="takeaway reveal reveal-6">
+      <span class="lbl">TAKEAWAY</span>
+      AI 不是替你选址 — <b>是把每一次开店决策都变成一次可学习的实验</b>。
+    </div>
+  </section>
+
+  <!-- ============ 7 · 案例 2: AI 销量预测 ============ -->
+  <section class="slide case">
+    <div class="case-head">
+      <div class="left">
+        <div class="case-no reveal reveal-1">CASE 02 / 05 · 预 测</div>
+        <h2 class="reveal reveal-2">从"凭感觉补货"到 <em>全品类 AI 预测</em></h2>
+      </div>
+      <div class="ind-chip reveal reveal-2">RETAIL · 销量 / 库存</div>
+    </div>
+    <div class="body">
+      <div class="panel problem reveal reveal-3">
+        <div class="step">▸ PROBLEM · 痛 点</div>
+        <h4>库存压死现金流</h4>
+        <ul>
+          <li>SKU 数万，靠 Excel 预测</li>
+          <li>缺货 = 失销，过剩 = 滞销</li>
+          <li>DSI 居高不下</li>
+        </ul>
+      </div>
+      <div class="panel solution reveal reveal-4">
+        <div class="step">▸ SOLUTION · 重 构</div>
+        <h4>时序 + ML 全品类预测体系</h4>
+        <ul>
+          <li>季节性 · 促销 · 天气 · 节假日因子</li>
+          <li>分层模型 — 长尾 SKU 自动归类</li>
+          <li>预测→补货→执行 全链路打通</li>
+        </ul>
+      </div>
+      <div class="panel result reveal reveal-5">
+        <div class="step">▸ OUTCOME · 结 果</div>
+        <h4 class="text-lime">让供应链"自己呼吸"</h4>
+        <div class="metrics">
+          <div class="metric"><div class="v">79<span class="unit">%</span></div><div class="k">预测准确率</div></div>
+          <div class="metric"><div class="v"><span class="arrow">↓</span>4<span class="unit">天</span></div><div class="k">DSI 下降</div></div>
+          <div class="metric"><div class="v">¥1500<span class="unit">万</span></div><div class="k">年增收</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="takeaway reveal reveal-6">
+      <span class="lbl">TAKEAWAY</span>
+      <b>预测不是预言</b> — 它是给业务一个"决策反应时间"。
+    </div>
+  </section>
+
+  <!-- ============ 8 · 案例 3: 价格弹性 ============ -->
+  <section class="slide case">
+    <div class="case-head">
+      <div class="left">
+        <div class="case-no reveal reveal-1">CASE 03 / 05 · 定 价</div>
+        <h2 class="reveal reveal-2">用 AI 算出 <em>每一个 SKU 的价格弹性</em></h2>
+      </div>
+      <div class="ind-chip reveal reveal-2">RETAIL · LightGBM</div>
+    </div>
+    <div class="body">
+      <div class="panel problem reveal reveal-3">
+        <div class="step">▸ PROBLEM · 痛 点</div>
+        <h4>降价是赌 · 不降是怕</h4>
+        <ul>
+          <li>定价靠 Buyer 经验 + 竞品对标</li>
+          <li>降不降、降多少 没有量化依据</li>
+          <li>决策周期 3 个月起</li>
+        </ul>
+      </div>
+      <div class="panel solution reveal reveal-4">
+        <div class="step">▸ SOLUTION · 重 构</div>
+        <h4>价格弹性模拟引擎</h4>
+        <ul>
+          <li>LightGBM 学历史价 - 量曲线</li>
+          <li>反事实推断：如果降 5%，销量怎么变</li>
+          <li>毛利 vs 销量自动寻优</li>
+        </ul>
+      </div>
+      <div class="panel result reveal reveal-5">
+        <div class="step">▸ OUTCOME · 结 果</div>
+        <h4 class="text-lime">把"价格直觉"变成"价格算法"</h4>
+        <div class="metrics">
+          <div class="metric"><div class="v"><span class="arrow">↓</span>3<span class="unit">月</span></div><div class="k">决策周期缩短</div></div>
+          <div class="metric"><div class="v">¥1000<span class="unit">万</span></div><div class="k">单品节约</div></div>
+          <div class="metric"><div class="v">N<span class="unit">×</span></div><div class="k">SKU 可规模化</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="takeaway reveal reveal-6">
+      <span class="lbl">TAKEAWAY</span>
+      AI 重构定价的本质 — <b>把"我以为"换成"我知道"</b>。
+    </div>
+  </section>
+
+  <!-- ============ 9 · 案例 4: 大模型 + 门店安全 ============ -->
+  <section class="slide case">
+    <div class="case-head">
+      <div class="left">
+        <div class="case-no reveal reveal-1">CASE 04 / 05 · 安 全</div>
+        <h2 class="reveal reveal-2">让大模型 <em>替门店"走一遍"</em></h2>
+      </div>
+      <div class="ind-chip reveal reveal-2">LLM + OCR + NLP</div>
+    </div>
+    <div class="body">
+      <div class="panel problem reveal reveal-3">
+        <div class="step">▸ PROBLEM · 痛 点</div>
+        <h4>安全巡检 = 人工 + 表格</h4>
+        <ul>
+          <li>1500+ 门店 · 每月一次巡检</li>
+          <li>报告靠人写，问题靠人盯</li>
+          <li>风险点漏检 · 整改不闭环</li>
+        </ul>
+      </div>
+      <div class="panel solution reveal reveal-4">
+        <div class="step">▸ SOLUTION · 重 构</div>
+        <h4>「小跃 Leap」AI 安全诊断</h4>
+        <ul>
+          <li>Qwen LLM 读巡检报告 · 自动归类</li>
+          <li>OCR + NLP 抽取关键风险点</li>
+          <li>知识库 · RAG · Agent 闭环整改</li>
+        </ul>
+      </div>
+      <div class="panel result reveal reveal-5">
+        <div class="step">▸ OUTCOME · 结 果</div>
+        <h4 class="text-lime">不是替代人,是把人解放出来</h4>
+        <div class="metrics">
+          <div class="metric"><div class="v">6400<span class="unit">小时</span></div><div class="k">年节省工时</div></div>
+          <div class="metric"><div class="v">¥320<span class="unit">万</span></div><div class="k">年成本下降</div></div>
+          <div class="metric"><div class="v">100<span class="unit">%</span></div><div class="k">覆盖 / 可追溯</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="takeaway reveal reveal-6">
+      <span class="lbl">TAKEAWAY</span>
+      大模型最大的价值 — <b>把"读、写、查"这类重复脑力劳动，从人身上拿走</b>。
+    </div>
+  </section>
+
+  <!-- ============ 10 · 案例 5: 精准营销 ============ -->
+  <section class="slide case">
+    <div class="case-head">
+      <div class="left">
+        <div class="case-no reveal reveal-1">CASE 05 / 05 · 营 销</div>
+        <h2 class="reveal reveal-2">用聚类找出 <em>真正会买的人</em></h2>
+      </div>
+      <div class="ind-chip reveal reveal-2">K-MEANS · 年轻客群</div>
+    </div>
+    <div class="body">
+      <div class="panel problem reveal reveal-3">
+        <div class="step">▸ PROBLEM · 痛 点</div>
+        <h4>广撒网 = 烧预算</h4>
+        <ul>
+          <li>会员千万级,但用户画像粗</li>
+          <li>促销 ROI 低</li>
+          <li>年轻客群留不住</li>
+        </ul>
+      </div>
+      <div class="panel solution reveal reveal-4">
+        <div class="step">▸ SOLUTION · 重 构</div>
+        <h4>K-Means 圈人 + 生命周期分层</h4>
+        <ul>
+          <li>多维特征下钻 — 行为 · 偏好 · 频次</li>
+          <li>每个簇匹配差异化触达策略</li>
+          <li>A/B 测试持续校准</li>
+        </ul>
+      </div>
+      <div class="panel result reveal reveal-5">
+        <div class="step">▸ OUTCOME · 结 果</div>
+        <h4 class="text-lime">"千人一面" → "千人千面"</h4>
+        <div class="metrics">
+          <div class="metric"><div class="v"><span class="arrow">↑</span>5<span class="unit">pp</span></div><div class="k">年轻客群留存</div></div>
+          <div class="metric"><div class="v">¥3300<span class="unit">万</span></div><div class="k">带动销售</div></div>
+          <div class="metric"><div class="v">N<span class="unit">个簇</span></div><div class="k">可持续迭代</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="takeaway reveal reveal-6">
+      <span class="lbl">TAKEAWAY</span>
+      增长不是花更多钱,是 <b>花同样的钱找对人</b>。
+    </div>
+  </section>
+
+  <!-- ============ 11 · Restaurant — back to topic ============ -->
+  <section class="slide restaurant">
+    <div class="header">
+      <div class="eyebrow center reveal reveal-1">BACK TO THE TOPIC · 回到机器人餐厅</div>
+      <h2 class="title reveal reveal-2" style="margin-top:18px">如果是这家餐厅 — <em>AI 能重构什么?</em></h2>
+      <h3 class="sub reveal reveal-3" style="margin-top:14px">机器人是"前台",AI 才是"操作系统"。</h3>
+    </div>
+    <div class="grid">
+      <div class="r-card reveal reveal-3">
+        <div class="icon-r">01</div>
+        <h4>选址</h4>
+        <div class="en">SITE</div>
+        <p>哪个商圈值得开第二家?<br/>客流 · 餐饮密度 · 周边消费力 — AI 一周给答案。</p>
+        <div class="tag">▸ GIS · ML</div>
+      </div>
+      <div class="r-card reveal reveal-4">
+        <div class="icon-r">02</div>
+        <h4>菜单</h4>
+        <div class="en">MENU</div>
+        <p>哪些菜是"心智菜",哪些在拖后腿?<br/>商品矩阵 + 蚕食分析 自动重构。</p>
+        <div class="tag">▸ ASSORTMENT</div>
+      </div>
+      <div class="r-card reveal reveal-5">
+        <div class="icon-r">03</div>
+        <h4>定价</h4>
+        <div class="en">PRICING</div>
+        <p>套餐怎么组合最赚?<br/>价格弹性 + 时段动态定价。</p>
+        <div class="tag">▸ ELASTICITY</div>
+      </div>
+      <div class="r-card reveal reveal-5">
+        <div class="icon-r">04</div>
+        <h4>排班</h4>
+        <div class="en">OPERATION</div>
+        <p>机器人 + 人 怎么排?<br/>客流预测 + 智能排班 = 不浪费一份工时。</p>
+        <div class="tag">▸ FORECAST · SCHED</div>
+      </div>
+      <div class="r-card reveal reveal-6">
+        <div class="icon-r">05</div>
+        <h4>体验</h4>
+        <div class="en">EXPERIENCE</div>
+        <p>Agent 当点单员 · 大模型记得你上次的口味,<br/>把"标准化"做成"千人千味"。</p>
+        <div class="tag">▸ LLM · AGENT</div>
+      </div>
+    </div>
+    <div class="punchline reveal reveal-6">
+      机器人解决"<span class="text-mute">做菜的手</span>",AI 解决"<span class="hl">做生意的脑</span>"。
+    </div>
+  </section>
+
+  <!-- ============ 12 · Framework ============ -->
+  <section class="slide framework">
+    <div class="header">
+      <div class="eyebrow center reveal reveal-1">METHODOLOGY · 方法论</div>
+      <h2 class="title reveal reveal-2" style="margin-top:18px">场景重构 <em>三步法</em></h2>
+    </div>
+    <div class="flow">
+      <div class="step-card reveal reveal-3">
+        <div class="nm">01</div>
+        <div class="step-label">STEP · 01</div>
+        <h4>识 别</h4>
+        <div class="en">IDENTIFY</div>
+        <p>不是"哪里能上 AI",<br/>是"哪个决策最贵 · 最频繁 · 最依赖经验"。</p>
+        <div class="quest">▸ 决策频率 × 决策成本 × 数据存量<br/>▸ 找到那个"高频高错"的环节</div>
+      </div>
+      <div class="arrow">▶</div>
+      <div class="step-card reveal reveal-4">
+        <div class="nm">02</div>
+        <div class="step-label">STEP · 02</div>
+        <h4>重 构</h4>
+        <div class="en">RE-ARCHITECT</div>
+        <p>不是"加个模型",<br/>是把人 · 数据 · 流程 · 系统重新接一遍。</p>
+        <div class="quest">▸ 数据基座 → 模型 → 入口 → 闭环<br/>▸ "AI 中台 + 业务场景"双轮</div>
+      </div>
+      <div class="arrow">▶</div>
+      <div class="step-card reveal reveal-5">
+        <div class="nm">03</div>
+        <div class="step-label">STEP · 03</div>
+        <h4>度 量</h4>
+        <div class="en">MEASURE</div>
+        <p>每个 AI 项目 = 一笔可被审计的投资。<br/>不能落到 P&L,就还不算"重构"。</p>
+        <div class="quest">▸ 准确率不是结果 — 钱才是<br/>▸ 业务指标 · 财务指标 · 文化指标</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 13 · Future ============ -->
+  <section class="slide future brackets">
+    <span class="br-bl"></span><span class="br-br"></span>
+    <div class="eyebrow center reveal reveal-1">CLOSING THOUGHT · 收 束</div>
+    <h2 class="reveal reveal-2">
+      未来十年,<br/>
+      <span class="core">每一个场景</span><br/>
+      都值得被 AI <span class="core">重做一遍</span>。
+    </h2>
+    <div class="triplets">
+      <div class="triplet reveal reveal-3">
+        <div class="k">▸ INDUSTRIES</div>
+        <h5>每个行业</h5>
+        <p>从零售到地产,从医疗到餐饮 — 数据密度足够的地方,AI 都会到。</p>
+      </div>
+      <div class="triplet reveal reveal-4">
+        <div class="k">▸ DECISIONS</div>
+        <h5>每个决策</h5>
+        <p>从战略到日常 — 高频决策被算法,低频决策被增强。</p>
+      </div>
+      <div class="triplet reveal reveal-5">
+        <div class="k">▸ EXPERIENCES</div>
+        <h5>每个体验</h5>
+        <p>从交易到陪伴 — 顾客面对的"前台",会变成 AI 编排的体验流。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 14 · Closing ============ -->
+  <section class="slide closing brackets">
+    <span class="br-bl"></span><span class="br-br"></span>
+    <div class="thanks reveal reveal-1">谢 谢</div>
+    <div class="thanks-en reveal reveal-2">T · H · A · N · K · S</div>
+    <div class="info">
+      <div class="col reveal reveal-3">
+        <div class="k">▸ SPEAKER</div>
+        <div class="v">Chen Gao · 高 晨</div>
+        <div class="sub">VP · Big Data & AI · GLP</div>
+      </div>
+      <div class="sep"></div>
+      <div class="col right reveal reveal-4">
+        <div class="k">▸ PERSONAL SKILL TREE</div>
+        <div class="v">gaochen219.github.io/personal-skills</div>
+        <div class="sub">6 行业 · 9 能力域 · 43 技术方法</div>
+      </div>
+    </div>
+    <div class="qa reveal reveal-5">Q &amp; A · 提 问 时 间 <span>_</span></div>
+  </section>
+
+</div>
+
+<!-- Bottom chrome -->
+<div class="chrome-bottom">
+  <div class="hint">
+    <kbd>←</kbd><kbd>→</kbd> 翻页 &nbsp;·&nbsp; <kbd>Space</kbd> 下一页 &nbsp;·&nbsp; <kbd>F</kbd> 全屏
+  </div>
+  <div class="ticks" id="ticks"></div>
+  <div class="hint" id="page-num">01 / --</div>
+</div>
+
+<script>
+/* ============ Deck control ============ */
+const slides = document.querySelectorAll('.slide');
+const ticks = document.getElementById('ticks');
+const pageNum = document.getElementById('page-num');
+let current = 0;
+const total = slides.length;
+
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function buildTicks() {
+  ticks.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const t = document.createElement('div');
+    t.className = 'tk';
+    t.dataset.idx = i;
+    t.onclick = () => goTo(i);
+    ticks.appendChild(t);
+  }
+}
+
+function render() {
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === current);
+    s.classList.toggle('prev', i < current);
+  });
+  ticks.querySelectorAll('.tk').forEach((t, i) => {
+    t.classList.toggle('active', i === current);
+    t.classList.toggle('done', i < current);
+  });
+  pageNum.textContent = `${pad(current + 1)} / ${pad(total)}`;
+}
+
+function goTo(i) {
+  if (i < 0 || i >= total) return;
+  current = i;
+  render();
+}
+function next() { goTo(Math.min(current + 1, total - 1)); }
+function prev() { goTo(Math.max(current - 1, 0)); }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'ArrowDown') { e.preventDefault(); next(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'ArrowUp') { e.preventDefault(); prev(); }
+  else if (e.key === 'Home') { goTo(0); }
+  else if (e.key === 'End') { goTo(total - 1); }
+  else if (e.key === 'f' || e.key === 'F') {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+});
+
+// Touch / swipe
+let touchX = 0;
+document.addEventListener('touchstart', e => touchX = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 50) (dx < 0 ? next() : prev());
+});
+
+// Wheel
+let wheelLock = false;
+document.addEventListener('wheel', (e) => {
+  if (wheelLock) return;
+  if (Math.abs(e.deltaY) < 30) return;
+  wheelLock = true;
+  if (e.deltaY > 0) next(); else prev();
+  setTimeout(() => wheelLock = false, 700);
+}, { passive: true });
+
+buildTicks();
+render();
+
+/* ============ Clock ============ */
+function tick() {
+  const d = new Date();
+  document.getElementById('clock').textContent =
+    pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+}
+setInterval(tick, 1000); tick();
+
+/* ============ Particle canvas (cyber dust) ============ */
+const cvs = document.getElementById('particles');
+const ctx = cvs.getContext('2d');
+let W, H, particles = [];
+function resize() {
+  W = cvs.width = innerWidth * devicePixelRatio;
+  H = cvs.height = innerHeight * devicePixelRatio;
+  cvs.style.width = innerWidth + 'px';
+  cvs.style.height = innerHeight + 'px';
+}
+resize();
+addEventListener('resize', resize);
+
+function makeParticles() {
+  particles = [];
+  const n = Math.min(120, Math.floor((innerWidth * innerHeight) / 12000));
+  for (let i = 0; i < n; i++) {
+    particles.push({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.3 * devicePixelRatio,
+      vy: (Math.random() - 0.5) * 0.3 * devicePixelRatio,
+      r: Math.random() * 1.6 + 0.3,
+      a: Math.random() * 0.6 + 0.2,
+      c: Math.random() > 0.85 ? '255,43,214' : '0,240,255',
+    });
+  }
+}
+makeParticles();
+addEventListener('resize', makeParticles);
+
+function loop() {
+  ctx.clearRect(0, 0, W, H);
+  // links
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const a = particles[i], b = particles[j];
+      const dx = a.x - b.x, dy = a.y - b.y;
+      const d2 = dx * dx + dy * dy;
+      const maxD = 120 * devicePixelRatio;
+      if (d2 < maxD * maxD) {
+        const op = (1 - Math.sqrt(d2) / maxD) * 0.12;
+        ctx.strokeStyle = `rgba(0,240,255,${op})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      }
+    }
+  }
+  // dots
+  for (const p of particles) {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > W) p.vx *= -1;
+    if (p.y < 0 || p.y > H) p.vy *= -1;
+    ctx.fillStyle = `rgba(${p.c},${p.a})`;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r * devicePixelRatio, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+
+</body>
+</html>
