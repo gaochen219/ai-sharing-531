@@ -506,6 +506,82 @@
     color: var(--magenta); font-weight: 600;
   }
 
+  /* ============ Slide: AI Heatmap ============ */
+  .slide.heatmap { justify-content: center; gap: 16px; }
+  .heatmap .hm-head {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    width: 100%; max-width: 1320px; gap: 32px;
+  }
+  .heatmap .hm-legend { display: flex; align-items: center; gap: 16px; }
+  .heatmap .hm-legend .lg {
+    display: flex; align-items: center; gap: 7px;
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--ink-1); letter-spacing: 1px;
+  }
+  .heatmap .hm-legend .sw { width: 14px; height: 14px; border-radius: 2px; }
+  .heatmap .hm-legend .sw.high { background: var(--cyan); box-shadow: 0 0 10px rgba(0,240,255,.6); }
+  .heatmap .hm-legend .sw.mid { background: var(--gold); }
+  .heatmap .hm-legend .sw.low { background: rgba(255,84,112,.22); border: 1px solid rgba(255,84,112,.5); }
+  .heatmap .hm-legend .lg-note {
+    font-family: "JetBrains Mono", monospace; font-size: 9px;
+    color: var(--ink-3); letter-spacing: 2px;
+  }
+  .heatmap .hm-wrap { width: 100%; max-width: 1320px; }
+  .hm-table {
+    width: 100%; border-collapse: separate; border-spacing: 4px; table-layout: fixed;
+  }
+  .hm-table th {
+    font-family: "JetBrains Mono", monospace; font-weight: 500;
+    font-size: 11px; color: var(--ink-2); letter-spacing: 0.5px;
+    padding: 4px; text-align: center; line-height: 1.25;
+  }
+  .hm-table th.corner {
+    text-align: left; color: var(--cyan); font-size: 9.5px; width: 14%; white-space: nowrap;
+  }
+  .hm-table thead th:not(.corner) { border-bottom: 1px solid rgba(0,240,255,.2); }
+  .hm-table td.row-label {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-size: 13px; font-weight: 500; color: var(--ink-1);
+    text-align: left; padding: 0 12px 0 4px; white-space: nowrap;
+  }
+  .hm-table td.cell {
+    text-align: center; font-family: "JetBrains Mono", monospace;
+    font-weight: 700; font-size: 12.5px; height: 32px; border-radius: 3px;
+    transition: transform .15s, box-shadow .2s;
+  }
+  .hm-table td.cell.h { background: var(--cyan); color: #03050d; box-shadow: 0 0 12px rgba(0,240,255,.4); }
+  .hm-table td.cell.m { background: rgba(255,200,87,.85); color: #1a1200; }
+  .hm-table td.cell.l { background: rgba(255,84,112,.14); color: rgba(255,140,160,.82); }
+  .hm-table tbody tr:hover td.cell { transform: scale(1.05); }
+  .hm-table tbody tr:hover td.row-label { color: var(--cyan); }
+  .heatmap .hm-take {
+    width: 100%; max-width: 1320px; padding: 14px 22px;
+    border-left: 2px solid var(--cyan);
+    background: linear-gradient(90deg, rgba(0,240,255,.08), transparent);
+    color: var(--ink-1); font-size: 16px; line-height: 1.6;
+  }
+  .heatmap .hm-take .lbl {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--cyan); letter-spacing: 3px; margin-right: 14px;
+  }
+  .heatmap .hm-take b { color: var(--ink-0); font-weight: 700; }
+  .heatmap .hm-src {
+    font-family: "JetBrains Mono", monospace; font-size: 9px;
+    color: var(--ink-3); letter-spacing: 1px; margin-left: 14px;
+  }
+
+  /* r-card flow (传统 → AI) */
+  .r-card .rc-flow { margin-top: 14px; display: flex; flex-direction: column; gap: 3px; }
+  .r-card .rc-flow .was {
+    font-size: 12px; color: var(--ink-3); text-decoration: line-through;
+    text-decoration-color: rgba(255,84,112,.5);
+  }
+  .r-card .rc-flow .ar {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--magenta); letter-spacing: 1px; margin: 1px 0;
+  }
+  .r-card .rc-flow .now { font-size: 12.5px; color: var(--ink-0); font-weight: 500; line-height: 1.45; }
+
   /* ============ Slide: Framework ============ */
   .framework {
     flex-direction: column; gap: 36px; align-items: stretch;
@@ -827,223 +903,53 @@
     </div>
   </section>
 
-  <!-- ============ 6 · 案例 1: AI 选址 ============ -->
-  <section class="slide case">
-    <div class="case-head">
+  <!-- ============ 6 · AI 技术热力图（行业视角） ============ -->
+  <section class="slide heatmap">
+    <div class="hm-head">
       <div class="left">
-        <div class="case-no reveal reveal-1">CASE 01 / 05 · 选 址</div>
-        <h2 class="reveal reveal-2">从拍脑袋到 <em>AI 智能选址</em></h2>
+        <div class="eyebrow reveal reveal-1">INDUSTRY VIEW · 行业视角</div>
+        <h2 class="title reveal reveal-2" style="margin-top:14px">AI 技术 <em>热力图</em></h2>
       </div>
-      <div class="ind-chip reveal reveal-2">RETAIL · 零售 · 1500+ 门店</div>
-    </div>
-    <div class="body">
-      <div class="panel problem reveal reveal-3">
-        <div class="step">▸ PROBLEM · 痛 点</div>
-        <h4>开店靠经验，开错一家代价以千万计</h4>
-        <ul>
-          <li>商圈分析靠人去走</li>
-          <li>新店蚕食老店没人量化</li>
-          <li>决策周期 3-6 个月</li>
-        </ul>
-      </div>
-      <div class="panel solution reveal reveal-4">
-        <div class="step">▸ SOLUTION · 重 构</div>
-        <h4>GIS + 机器学习选址引擎</h4>
-        <ul>
-          <li>POI · 人口 · 交通 · 商圈数据融合</li>
-          <li>XGBoost 预测单店年销</li>
-          <li>蚕食效应纳入模型</li>
-        </ul>
-      </div>
-      <div class="panel result reveal reveal-5">
-        <div class="step">▸ OUTCOME · 结 果</div>
-        <h4 class="text-lime">把"赌"变成"算"</h4>
-        <div class="metrics">
-          <div class="metric"><div class="v">86<span class="unit">%</span></div><div class="k">预测准确率</div></div>
-          <div class="metric"><div class="v"><span class="arrow">↑</span>8<span class="unit">pp</span></div><div class="k">较基线提升</div></div>
-          <div class="metric"><div class="v">千万<span class="unit">级</span></div><div class="k">年节约 / 避损</div></div>
-        </div>
+      <div class="hm-legend reveal reveal-2">
+        <span class="lg"><i class="sw high"></i>高 · H</span>
+        <span class="lg"><i class="sw mid"></i>中 · M</span>
+        <span class="lg"><i class="sw low"></i>低 · L</span>
+        <span class="lg-note">技术适用性 · SUITABILITY</span>
       </div>
     </div>
-    <div class="takeaway reveal reveal-6">
-      <span class="lbl">TAKEAWAY</span>
-      AI 不是替你选址 — <b>是把每一次开店决策都变成一次可学习的实验</b>。
+    <div class="hm-wrap reveal reveal-3">
+      <table class="hm-table">
+        <thead>
+          <tr>
+            <th class="corner">用例 \ 技术</th>
+            <th>生成式<br/>模型</th>
+            <th>非生成式<br/>机器学习</th>
+            <th>优化</th>
+            <th>模拟</th>
+            <th>规则<br/>启发式</th>
+            <th>图技术</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-label">预测 / 预报</td><td class="cell l">L</td><td class="cell h">H</td><td class="cell l">L</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell l">L</td></tr>
+          <tr><td class="row-label">规划</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell m">M</td><td class="cell m">M</td></tr>
+          <tr><td class="row-label">决策智能</td><td class="cell l">L</td><td class="cell m">M</td><td class="cell h">H</td><td class="cell h">H</td><td class="cell h">H</td><td class="cell m">M</td></tr>
+          <tr><td class="row-label">自主系统</td><td class="cell l">L</td><td class="cell m">M</td><td class="cell h">H</td><td class="cell h">H</td><td class="cell h">H</td><td class="cell l">L</td></tr>
+          <tr><td class="row-label">分割 / 分类</td><td class="cell m">M</td><td class="cell h">H</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell m">M</td></tr>
+          <tr><td class="row-label">推荐系统</td><td class="cell m">M</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell h">H</td></tr>
+          <tr><td class="row-label">洞察力</td><td class="cell m">M</td><td class="cell h">H</td><td class="cell l">L</td><td class="cell m">M</td><td class="cell l">L</td><td class="cell h">H</td></tr>
+          <tr><td class="row-label">智能自动化</td><td class="cell m">M</td><td class="cell h">H</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell h">H</td></tr>
+          <tr><td class="row-label">异常检测 / 监控</td><td class="cell m">M</td><td class="cell h">H</td><td class="cell l">L</td><td class="cell m">M</td><td class="cell m">M</td><td class="cell h">H</td></tr>
+          <tr><td class="row-label">内容生成</td><td class="cell h">H</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell l">L</td></tr>
+          <tr><td class="row-label">对话式用户界面</td><td class="cell h">H</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell m">M</td></tr>
+          <tr><td class="row-label">知识发现</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell m">M</td></tr>
+        </tbody>
+      </table>
     </div>
-  </section>
-
-  <!-- ============ 7 · 案例 2: AI 销量预测 ============ -->
-  <section class="slide case">
-    <div class="case-head">
-      <div class="left">
-        <div class="case-no reveal reveal-1">CASE 02 / 05 · 预 测</div>
-        <h2 class="reveal reveal-2">从"凭感觉补货"到 <em>全品类 AI 预测</em></h2>
-      </div>
-      <div class="ind-chip reveal reveal-2">RETAIL · 销量 / 库存</div>
-    </div>
-    <div class="body">
-      <div class="panel problem reveal reveal-3">
-        <div class="step">▸ PROBLEM · 痛 点</div>
-        <h4>库存压死现金流</h4>
-        <ul>
-          <li>SKU 数万，靠 Excel 预测</li>
-          <li>缺货 = 失销，过剩 = 滞销</li>
-          <li>DSI 居高不下</li>
-        </ul>
-      </div>
-      <div class="panel solution reveal reveal-4">
-        <div class="step">▸ SOLUTION · 重 构</div>
-        <h4>时序 + ML 全品类预测体系</h4>
-        <ul>
-          <li>季节性 · 促销 · 天气 · 节假日因子</li>
-          <li>分层模型 — 长尾 SKU 自动归类</li>
-          <li>预测→补货→执行 全链路打通</li>
-        </ul>
-      </div>
-      <div class="panel result reveal reveal-5">
-        <div class="step">▸ OUTCOME · 结 果</div>
-        <h4 class="text-lime">让供应链"自己呼吸"</h4>
-        <div class="metrics">
-          <div class="metric"><div class="v">79<span class="unit">%</span></div><div class="k">预测准确率</div></div>
-          <div class="metric"><div class="v"><span class="arrow">↓</span>4<span class="unit">天</span></div><div class="k">DSI 下降</div></div>
-          <div class="metric"><div class="v">千万<span class="unit">级</span></div><div class="k">年增收</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="takeaway reveal reveal-6">
-      <span class="lbl">TAKEAWAY</span>
-      <b>预测不是预言</b> — 它是给业务一个"决策反应时间"。
-    </div>
-  </section>
-
-  <!-- ============ 8 · 案例 3: 价格弹性 ============ -->
-  <section class="slide case">
-    <div class="case-head">
-      <div class="left">
-        <div class="case-no reveal reveal-1">CASE 03 / 05 · 定 价</div>
-        <h2 class="reveal reveal-2">用 AI 算出 <em>每一个 SKU 的价格弹性</em></h2>
-      </div>
-      <div class="ind-chip reveal reveal-2">RETAIL · LightGBM</div>
-    </div>
-    <div class="body">
-      <div class="panel problem reveal reveal-3">
-        <div class="step">▸ PROBLEM · 痛 点</div>
-        <h4>降价是赌 · 不降是怕</h4>
-        <ul>
-          <li>定价靠 Buyer 经验 + 竞品对标</li>
-          <li>降不降、降多少 没有量化依据</li>
-          <li>决策周期 3 个月起</li>
-        </ul>
-      </div>
-      <div class="panel solution reveal reveal-4">
-        <div class="step">▸ SOLUTION · 重 构</div>
-        <h4>价格弹性模拟引擎</h4>
-        <ul>
-          <li>LightGBM 学历史价 - 量曲线</li>
-          <li>反事实推断：如果降 5%，销量怎么变</li>
-          <li>毛利 vs 销量自动寻优</li>
-        </ul>
-      </div>
-      <div class="panel result reveal reveal-5">
-        <div class="step">▸ OUTCOME · 结 果</div>
-        <h4 class="text-lime">把"价格直觉"变成"价格算法"</h4>
-        <div class="metrics">
-          <div class="metric"><div class="v"><span class="arrow">↓</span>3<span class="unit">月</span></div><div class="k">决策周期缩短</div></div>
-          <div class="metric"><div class="v">千万<span class="unit">级</span></div><div class="k">单品节约</div></div>
-          <div class="metric"><div class="v">N<span class="unit">×</span></div><div class="k">SKU 可规模化</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="takeaway reveal reveal-6">
-      <span class="lbl">TAKEAWAY</span>
-      AI 重构定价的本质 — <b>把"我以为"换成"我知道"</b>。
-    </div>
-  </section>
-
-  <!-- ============ 9 · 案例 4: 大模型 + 门店安全 ============ -->
-  <section class="slide case">
-    <div class="case-head">
-      <div class="left">
-        <div class="case-no reveal reveal-1">CASE 04 / 05 · 安 全</div>
-        <h2 class="reveal reveal-2">让大模型 <em>替门店"走一遍"</em></h2>
-      </div>
-      <div class="ind-chip reveal reveal-2">LLM + OCR + NLP</div>
-    </div>
-    <div class="body">
-      <div class="panel problem reveal reveal-3">
-        <div class="step">▸ PROBLEM · 痛 点</div>
-        <h4>安全巡检 = 人工 + 表格</h4>
-        <ul>
-          <li>1500+ 门店 · 每月一次巡检</li>
-          <li>报告靠人写，问题靠人盯</li>
-          <li>风险点漏检 · 整改不闭环</li>
-        </ul>
-      </div>
-      <div class="panel solution reveal reveal-4">
-        <div class="step">▸ SOLUTION · 重 构</div>
-        <h4>「小跃 Leap」AI 安全诊断</h4>
-        <ul>
-          <li>Qwen LLM 读巡检报告 · 自动归类</li>
-          <li>OCR + NLP 抽取关键风险点</li>
-          <li>知识库 · RAG · Agent 闭环整改</li>
-        </ul>
-      </div>
-      <div class="panel result reveal reveal-5">
-        <div class="step">▸ OUTCOME · 结 果</div>
-        <h4 class="text-lime">不是替代人,是把人解放出来</h4>
-        <div class="metrics">
-          <div class="metric"><div class="v">数千<span class="unit">小时</span></div><div class="k">年节省工时</div></div>
-          <div class="metric"><div class="v">百万<span class="unit">级</span></div><div class="k">年成本下降</div></div>
-          <div class="metric"><div class="v">100<span class="unit">%</span></div><div class="k">覆盖 / 可追溯</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="takeaway reveal reveal-6">
-      <span class="lbl">TAKEAWAY</span>
-      大模型最大的价值 — <b>把"读、写、查"这类重复脑力劳动，从人身上拿走</b>。
-    </div>
-  </section>
-
-  <!-- ============ 10 · 案例 5: 精准营销 ============ -->
-  <section class="slide case">
-    <div class="case-head">
-      <div class="left">
-        <div class="case-no reveal reveal-1">CASE 05 / 05 · 营 销</div>
-        <h2 class="reveal reveal-2">用聚类找出 <em>真正会买的人</em></h2>
-      </div>
-      <div class="ind-chip reveal reveal-2">K-MEANS · 年轻客群</div>
-    </div>
-    <div class="body">
-      <div class="panel problem reveal reveal-3">
-        <div class="step">▸ PROBLEM · 痛 点</div>
-        <h4>广撒网 = 烧预算</h4>
-        <ul>
-          <li>会员千万级,但用户画像粗</li>
-          <li>促销 ROI 低</li>
-          <li>年轻客群留不住</li>
-        </ul>
-      </div>
-      <div class="panel solution reveal reveal-4">
-        <div class="step">▸ SOLUTION · 重 构</div>
-        <h4>K-Means 圈人 + 生命周期分层</h4>
-        <ul>
-          <li>多维特征下钻 — 行为 · 偏好 · 频次</li>
-          <li>每个簇匹配差异化触达策略</li>
-          <li>A/B 测试持续校准</li>
-        </ul>
-      </div>
-      <div class="panel result reveal reveal-5">
-        <div class="step">▸ OUTCOME · 结 果</div>
-        <h4 class="text-lime">"千人一面" → "千人千面"</h4>
-        <div class="metrics">
-          <div class="metric"><div class="v"><span class="arrow">↑</span>5<span class="unit">pp</span></div><div class="k">年轻客群留存</div></div>
-          <div class="metric"><div class="v">千万<span class="unit">级</span></div><div class="k">带动销售</div></div>
-          <div class="metric"><div class="v">N<span class="unit">个簇</span></div><div class="k">可持续迭代</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="takeaway reveal reveal-6">
-      <span class="lbl">TAKEAWAY</span>
-      增长不是花更多钱,是 <b>花同样的钱找对人</b>。
+    <div class="hm-take reveal reveal-4">
+      <span class="lbl">SO WHAT</span>
+      几乎<b>每一类用例</b>,今天都已经有<b>成熟的 AI 技术</b>可用 —— 问题不再是"能不能",而是<b class="text-cyan">"先重构哪个场景"</b>。
+      <span class="hm-src">SOURCE · GARTNER</span>
     </div>
   </section>
 
@@ -1052,43 +958,63 @@
     <div class="header">
       <div class="eyebrow center reveal reveal-1">BACK TO THE TOPIC · 回到机器人餐厅</div>
       <h2 class="title reveal reveal-2" style="margin-top:18px">如果是这家餐厅 — <em>AI 能重构什么?</em></h2>
-      <h3 class="sub reveal reveal-3" style="margin-top:14px">机器人是"前台",AI 才是"操作系统"。</h3>
+      <h3 class="sub reveal reveal-3" style="margin-top:14px">机器人是"前台",AI 才是"操作系统" — 同一套"场景重构"方法,跨行业验证过,餐厅一样适用。</h3>
     </div>
     <div class="grid">
       <div class="r-card reveal reveal-3">
         <div class="icon-r">01</div>
         <h4>选址</h4>
         <div class="en">SITE</div>
-        <p>哪个商圈值得开第二家?<br/>客流 · 餐饮密度 · 周边消费力 — AI 一周给答案。</p>
-        <div class="tag">▸ GIS · ML</div>
+        <div class="rc-flow">
+          <span class="was">老师傅走商圈、拍脑袋</span>
+          <span class="ar">↓ AI 重构</span>
+          <span class="now">多源数据建模,预测单店产出与商圈潜力</span>
+        </div>
+        <div class="tag">▸ 选址准确率显著提升</div>
       </div>
       <div class="r-card reveal reveal-4">
         <div class="icon-r">02</div>
-        <h4>菜单</h4>
+        <h4>选品 · 菜单</h4>
         <div class="en">MENU</div>
-        <p>哪些菜是"心智菜",哪些在拖后腿?<br/>商品矩阵 + 蚕食分析 自动重构。</p>
-        <div class="tag">▸ ASSORTMENT</div>
+        <div class="rc-flow">
+          <span class="was">凭经验上新、人工汰换</span>
+          <span class="ar">↓ AI 重构</span>
+          <span class="now">商品矩阵 + 蚕食分析,自动找爆品与拖累项</span>
+        </div>
+        <div class="tag">▸ 爆品命中率↑ · 长尾↓</div>
       </div>
       <div class="r-card reveal reveal-5">
         <div class="icon-r">03</div>
         <h4>定价</h4>
         <div class="en">PRICING</div>
-        <p>套餐怎么组合最赚?<br/>价格弹性 + 时段动态定价。</p>
-        <div class="tag">▸ ELASTICITY</div>
+        <div class="rc-flow">
+          <span class="was">对标竞品、统一定价</span>
+          <span class="ar">↓ AI 重构</span>
+          <span class="now">价格弹性 + 时段动态定价,逐品寻优</span>
+        </div>
+        <div class="tag">▸ 决策周期大幅压缩</div>
       </div>
       <div class="r-card reveal reveal-5">
         <div class="icon-r">04</div>
         <h4>排班</h4>
         <div class="en">OPERATION</div>
-        <p>机器人 + 人 怎么排?<br/>客流预测 + 智能排班 = 不浪费一份工时。</p>
-        <div class="tag">▸ FORECAST · SCHED</div>
+        <div class="rc-flow">
+          <span class="was">固定班表、人机各管各</span>
+          <span class="ar">↓ AI 重构</span>
+          <span class="now">客流预测驱动人机协同排班</span>
+        </div>
+        <div class="tag">▸ 工时趋近零浪费</div>
       </div>
       <div class="r-card reveal reveal-6">
         <div class="icon-r">05</div>
         <h4>体验</h4>
         <div class="en">EXPERIENCE</div>
-        <p>Agent 当点单员 · 大模型记得你上次的口味,<br/>把"标准化"做成"千人千味"。</p>
-        <div class="tag">▸ LLM · AGENT</div>
+        <div class="rc-flow">
+          <span class="was">标准化、千人一面</span>
+          <span class="ar">↓ AI 重构</span>
+          <span class="now">Agent 点单 + 记忆口味的个性化服务</span>
+        </div>
+        <div class="tag">▸ 千人千味 · 复购↑</div>
       </div>
     </div>
     <div class="punchline reveal reveal-6">

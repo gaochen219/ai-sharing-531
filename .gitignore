@@ -1,0 +1,9 @@
+# 敏感素材 / 原始资料 — 勿上传 GitHub
+*.pdf
+*.jpg
+*.jpeg
+*.png
+
+# 临时预览 / 截图
+_preview_*.html
+_*.png
