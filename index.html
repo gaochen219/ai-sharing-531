@@ -800,6 +800,118 @@
     font-family: "JetBrains Mono", monospace; font-size: 10px; margin: 0 4px;
   }
 
+  /* ============ Slide: Timeline Evolution ============ */
+  .slide.timeline-evo { justify-content: center; gap: 22px; }
+  .timeline-evo .te-head { width: 100%; max-width: 1320px; text-align: center; }
+  .timeline-evo .te-track {
+    width: 100%; max-width: 1320px; position: relative; padding: 16px 0 8px;
+  }
+  .timeline-evo .te-line {
+    position: absolute; left: 4%; right: 4%; top: 60px; height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--cyan) 10%, var(--cyan) 50%, var(--magenta) 90%, transparent 100%);
+    box-shadow: 0 0 14px rgba(0,240,255,.45);
+  }
+  .timeline-evo .te-nodes {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px;
+    position: relative;
+  }
+  .te-node { display: flex; flex-direction: column; align-items: center; position: relative; }
+  .te-node .te-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--bg-0); border: 2px solid var(--cyan);
+    box-shadow: 0 0 14px rgba(0,240,255,.65);
+    margin-top: 52px; position: relative; z-index: 2;
+  }
+  .te-node:nth-child(6) .te-dot,
+  .te-node:last-child .te-dot { border-color: var(--magenta); box-shadow: 0 0 14px rgba(255,43,214,.65); }
+  .te-node .te-time {
+    font-family: "Orbitron", sans-serif; font-weight: 700;
+    font-size: 12.5px; color: var(--cyan); letter-spacing: 1.5px; margin-top: 12px;
+  }
+  .te-node:last-child .te-time { color: var(--magenta); }
+  .te-node .te-title {
+    font-size: 16px; font-weight: 700; color: var(--ink-0);
+    margin-top: 8px; text-align: center; line-height: 1.3;
+  }
+  .te-node .te-desc {
+    font-size: 11.5px; line-height: 1.6; color: var(--ink-2);
+    margin-top: 8px; padding: 0 8px; text-align: center;
+  }
+  .timeline-evo .te-punchline {
+    width: 100%; max-width: 1320px; padding: 14px 22px;
+    border-left: 2px solid var(--magenta);
+    background: linear-gradient(90deg, rgba(255,43,214,.08), transparent);
+    color: var(--ink-1); font-size: 17px; line-height: 1.65;
+  }
+  .timeline-evo .te-punchline b { color: var(--ink-0); }
+  .timeline-evo .te-punchline .mg { color: var(--magenta); font-weight: 600; }
+
+  /* ============ Slide: Floating Words ============ */
+  .slide.float-words { justify-content: flex-start; padding-top: 8vh; gap: 8px; }
+  .float-words .fw-head { width: 100%; max-width: 1320px; text-align: center; }
+  .float-words .fw-stage {
+    position: relative; width: 100%; max-width: 1320px; height: 64vh; margin-top: 8px;
+  }
+  .fw-word {
+    position: absolute; font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 800; cursor: default; user-select: none; white-space: nowrap;
+    background: linear-gradient(180deg, #fff 0%, var(--cyan) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 16px rgba(0,240,255,.25));
+    animation: floatWord 7s ease-in-out infinite alternate;
+    transition: filter .25s, transform .25s; letter-spacing: -0.5px;
+  }
+  .fw-word.mg {
+    background: linear-gradient(180deg, var(--magenta-soft) 0%, var(--magenta) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 16px rgba(255,43,214,.28));
+  }
+  .fw-word:hover { transform: scale(1.08); filter: drop-shadow(0 0 28px rgba(0,240,255,.6)); z-index: 5; }
+  .fw-word.mg:hover { filter: drop-shadow(0 0 28px rgba(255,43,214,.6)); }
+  .fw-word.xl { font-size: 72px; }
+  .fw-word.lg { font-size: 56px; }
+  .fw-word.md { font-size: 42px; }
+  .fw-word.sm { font-size: 32px; }
+  @keyframes floatWord {
+    0%   { transform: translate(0, 0) rotate(-1.2deg); }
+    50%  { transform: translate(8px, -14px) rotate(1.2deg); }
+    100% { transform: translate(-6px, 10px) rotate(-0.4deg); }
+  }
+  .fw-word .fw-tip {
+    visibility: hidden; opacity: 0;
+    position: absolute; left: 50%; top: 110%; transform: translateX(-50%);
+    background: rgba(3, 5, 13, .96);
+    color: var(--ink-1); -webkit-text-fill-color: var(--ink-1);
+    border: 1px solid rgba(0,240,255,.35);
+    padding: 9px 14px; border-radius: 4px;
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 400; font-size: 13px; line-height: 1.55;
+    white-space: normal; width: 280px;
+    filter: none; pointer-events: none;
+    transition: opacity .2s; z-index: 10;
+    letter-spacing: 0;
+  }
+  .fw-word.mg .fw-tip { border-color: rgba(255,43,214,.35); }
+  .fw-word:hover .fw-tip { visibility: visible; opacity: 1; }
+  /* water-line ripple background */
+  .float-words .fw-stage::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,240,255,.15), transparent);
+    pointer-events: none;
+  }
+  /* "disrupt" variant — old frames being struck through */
+  .slide.float-words.disrupt .fw-word {
+    background: linear-gradient(180deg, #aab4cc 0%, #6b7a96 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 10px rgba(255,84,112,.18));
+    -webkit-text-decoration: line-through; text-decoration: line-through;
+    text-decoration-color: rgba(255, 84, 112, .65); text-decoration-thickness: 3px;
+  }
+  .slide.float-words.disrupt .fw-word:hover {
+    filter: drop-shadow(0 0 18px rgba(255,84,112,.5));
+    text-decoration-color: rgba(255, 84, 112, 1);
+  }
+
   /* ============ Slide: AI Heatmap ============ */
   .slide.heatmap { justify-content: center; gap: 16px; }
   .heatmap .hm-head {
@@ -1210,7 +1322,7 @@
           <ul class="skills">
             <li>AI 中台 · 战略路线图</li>
             <li>RAG · Agent · Skill</li>
-            <li>XGBoost / LightGBM / K-Means</li>
+            <li>Machine Learning · Deep Learning</li>
             <li>预测 · 选址 · 定价 · 排班</li>
             <li>Embedding · Fine-tuning · MCP</li>
             <li>AI 合规治理</li>
@@ -1275,6 +1387,151 @@
         <span class="src-tag">GARTNER · 2026</span>
         <img src="assets/gartner-evolution.png" alt="Five generations of robot brain — Gartner 2026" />
       </div>
+    </div>
+  </section>
+
+  <!-- ============ 3c · 行业演进 时间轴 ============ -->
+  <section class="slide timeline-evo">
+    <div class="te-head">
+      <div class="eyebrow center reveal reveal-1">INDUSTRY EVOLUTION · 行业演进</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">从对话到 Agent 协作 — 仅用 <em>三 年</em></h2>
+      <h3 class="sub reveal reveal-3" style="margin-top:10px">每一次能力跃迁,都把"AI 能做什么"的边界推得更远。</h3>
+    </div>
+    <div class="te-track reveal reveal-4">
+      <div class="te-line"></div>
+      <div class="te-nodes">
+        <div class="te-node">
+          <div class="te-dot"></div>
+          <div class="te-time">2023 · Q1</div>
+          <div class="te-title">对话级交互</div>
+          <div class="te-desc">大模型元年。语言理解和生成惊艳,长上下文记忆。</div>
+        </div>
+        <div class="te-node">
+          <div class="te-dot"></div>
+          <div class="te-time">2024 · Q1</div>
+          <div class="te-title">推理链原生化</div>
+          <div class="te-desc">回答前先"思考",处理数学和逻辑推理。</div>
+        </div>
+        <div class="te-node">
+          <div class="te-dot"></div>
+          <div class="te-time">2024 · Q3</div>
+          <div class="te-title">工具调用</div>
+          <div class="te-desc">调用 API · 搜索 · RAG 接入企业知识库,幻觉显著下降。</div>
+        </div>
+        <div class="te-node">
+          <div class="te-dot"></div>
+          <div class="te-time">2025 · Q1</div>
+          <div class="te-title">Agent 降临</div>
+          <div class="te-desc">能拆解任务并逐步执行、最后交付结果的智能体单元。</div>
+        </div>
+        <div class="te-node">
+          <div class="te-dot"></div>
+          <div class="te-time">2025 · Q4</div>
+          <div class="te-title">自我纠错 / 反思</div>
+          <div class="te-desc">实时评估、自动修正计划,业务成功率大幅提高。</div>
+        </div>
+        <div class="te-node">
+          <div class="te-dot"></div>
+          <div class="te-time">2026 · 往后</div>
+          <div class="te-title">全面落地</div>
+          <div class="te-desc">多 Agent 协同、自主进化,重塑每一条业务链。</div>
+        </div>
+      </div>
+    </div>
+    <div class="te-punchline reveal reveal-5">
+      AI 不再是未来 —— 它是<b>现在</b>。能力已就绪,落地已证明 ——<br/>
+      唯一的问题是: <span class="mg">谁先跑起来</span>。
+    </div>
+  </section>
+
+  <!-- ============ 3d · AI 新词漂浮 ============ -->
+  <section class="slide float-words">
+    <div class="fw-head">
+      <div class="eyebrow center reveal reveal-1">NEW VOCABULARY · 新词层出不穷</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">AI 给我们带来的 <em>新词</em></h2>
+      <h3 class="sub reveal reveal-3" style="margin-top:10px;font-size:14px;color:var(--ink-2)">每一个词背后,都是一次能力跃迁 · <span style="color:var(--cyan)">悬停看解释</span></h3>
+    </div>
+    <div class="fw-stage reveal reveal-4">
+      <div class="fw-word xl" style="left:6%;top:8%;animation-delay:0s;">
+        韬<span style="font-size:.65em">τ</span> 定律
+        <span class="fw-tip">大模型规模 vs 性能的指数级关系 — 模型越大越聪明,但代价指数级上升。</span>
+      </div>
+      <div class="fw-word lg mg" style="left:60%;top:4%;animation-delay:1.2s;">
+        Token Pay
+        <span class="fw-tip">按 token 计费的新付费模式 — 用多少算多少,商业模式向"读写量"对齐。</span>
+      </div>
+      <div class="fw-word md" style="left:38%;top:22%;animation-delay:.6s;">
+        Scaling Law
+        <span class="fw-tip">规模定律 — 数据·参数·算力按某种比例增长,能力按幂律涌现。</span>
+      </div>
+      <div class="fw-word sm mg" style="left:80%;top:26%;animation-delay:2.4s;">
+        Emergent · 涌现
+        <span class="fw-tip">规模到达临界点后,模型突然"会"了 — 量变到质变。</span>
+      </div>
+      <div class="fw-word lg" style="left:10%;top:38%;animation-delay:.3s;">
+        AI-Native
+        <span class="fw-tip">AI 原生 — 不是"加 AI",而是从架构开始就以 AI 为中心。</span>
+      </div>
+      <div class="fw-word md mg" style="left:48%;top:44%;animation-delay:1.8s;">
+        Vibe Coding
+        <span class="fw-tip">凭"感觉"编程 — 描述意图给 AI,不再写每一行代码。</span>
+      </div>
+      <div class="fw-word sm" style="left:80%;top:50%;animation-delay:.9s;">
+        MCP
+        <span class="fw-tip">Model Context Protocol — 让大模型连接外部工具/数据的标准协议。</span>
+      </div>
+      <div class="fw-word md" style="left:6%;top:60%;animation-delay:2.1s;">
+        Hallucination
+        <span class="fw-tip">AI 幻觉 — 一本正经地胡说八道。</span>
+      </div>
+      <div class="fw-word lg mg" style="left:32%;top:66%;animation-delay:1.5s;">
+        VLA
+        <span class="fw-tip">Vision-Language-Action — 视觉-语言-动作大模型,机器人的"大脑"。</span>
+      </div>
+      <div class="fw-word sm" style="left:60%;top:74%;animation-delay:3s;">
+        CoT · 思维链
+        <span class="fw-tip">Chain-of-Thought — 让模型"想给你看"再回答,推理质量飙升。</span>
+      </div>
+      <div class="fw-word md mg" style="left:78%;top:74%;animation-delay:.5s;">
+        Alignment
+        <span class="fw-tip">对齐 — 让 AI 的目标与人类价值一致 — AI 安全的核心议题。</span>
+      </div>
+      <div class="fw-word sm" style="left:14%;top:84%;animation-delay:1.7s;">
+        AGI
+        <span class="fw-tip">通用人工智能 — 能做任何人类能做的智力任务的 AI。</span>
+      </div>
+      <div class="fw-word sm" style="left:40%;top:88%;animation-delay:.8s;">
+        Test-time Compute
+        <span class="fw-tip">推理时算力 — 让模型"多想一会儿",用算力换更好答案。</span>
+      </div>
+      <div class="fw-word md mg" style="left:64%;top:90%;animation-delay:2.7s;">
+        Foundation Model
+        <span class="fw-tip">基础模型 — 一个大模型作为 N 个下游应用的底座。</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3e · 旧思维框架 — 被颠覆 ============ -->
+  <section class="slide float-words disrupt">
+    <div class="fw-head">
+      <div class="eyebrow center reveal reveal-1">OLD FRAMES · 旧思维框架</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">这些词,该 <em>重新想一遍</em> 了</h2>
+      <h3 class="sub reveal reveal-3" style="margin-top:10px;font-size:14px;color:var(--ink-2)">AI 加速下,被颠覆的不只是技术 — 还有我们的<span style="color:var(--red)">思维框架</span></h3>
+    </div>
+    <div class="fw-stage reveal reveal-4">
+      <div class="fw-word xl" style="left:6%;top:8%;animation-delay:0s;">竞争壁垒</div>
+      <div class="fw-word lg" style="left:55%;top:4%;animation-delay:1.2s;">垂直行业</div>
+      <div class="fw-word md" style="left:34%;top:22%;animation-delay:.6s;">护城河</div>
+      <div class="fw-word sm" style="left:78%;top:24%;animation-delay:2.4s;">行业经验</div>
+      <div class="fw-word lg" style="left:10%;top:38%;animation-delay:.3s;">专业分工</div>
+      <div class="fw-word md" style="left:46%;top:44%;animation-delay:1.8s;">学历门槛</div>
+      <div class="fw-word sm" style="left:78%;top:50%;animation-delay:.9s;">学习曲线</div>
+      <div class="fw-word md" style="left:6%;top:60%;animation-delay:2.1s;">行业 know-how</div>
+      <div class="fw-word lg" style="left:34%;top:66%;animation-delay:1.5s;">规模优势</div>
+      <div class="fw-word sm" style="left:60%;top:72%;animation-delay:3s;">核心能力</div>
+      <div class="fw-word md" style="left:14%;top:82%;animation-delay:.5s;">传统行业</div>
+      <div class="fw-word sm" style="left:42%;top:88%;animation-delay:1.7s;">代码壁垒</div>
+      <div class="fw-word md" style="left:68%;top:86%;animation-delay:2.7s;">B 端 / C 端</div>
     </div>
   </section>
 
@@ -1586,7 +1843,7 @@
       <div class="col right reveal reveal-4">
         <div class="k">▸ EXPERIENCE</div>
         <div class="v">15+ 年 · 数据与 AI</div>
-        <div class="sub">6 行业 · 9 能力域 · 43 技术方法</div>
+        <div class="sub">10 行业 · 大数据 × AI · 15+ 年深耕</div>
       </div>
     </div>
     <div class="qa reveal reveal-5">Q &amp; A · 提 问 时 间 <span>_</span></div>
