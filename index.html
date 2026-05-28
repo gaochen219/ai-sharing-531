@@ -506,6 +506,63 @@
     color: var(--magenta); font-weight: 600;
   }
 
+  /* ============ Slides: Gartner Inserts ============ */
+  .slide.gartner { justify-content: center; gap: 22px; }
+  .gartner .g-head { width: 100%; max-width: 1320px; }
+  .gartner .g-body {
+    width: 100%; max-width: 1320px;
+    display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 36px;
+    align-items: center;
+  }
+  .gartner .g-text { display: flex; flex-direction: column; gap: 18px; }
+  .gartner .g-bigword {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 800; font-size: clamp(48px, 6.2vw, 92px);
+    line-height: 1; letter-spacing: -1.5px;
+    background: linear-gradient(120deg, var(--cyan), var(--magenta));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .gartner .g-lead {
+    font-size: 17px; line-height: 1.75; color: var(--ink-1); font-weight: 300;
+  }
+  .gartner .g-lead b { color: var(--ink-0); font-weight: 600; }
+  .gartner .g-lead .cy { color: var(--cyan); font-weight: 600; }
+  .gartner .g-datarow {
+    display: flex; flex-wrap: wrap; gap: 18px 28px;
+    padding-top: 16px; border-top: 1px dashed rgba(0,240,255,.18);
+  }
+  .gartner .g-datarow .dp { display: flex; flex-direction: column; min-width: 100px; }
+  .gartner .g-datarow .dp .v {
+    font-family: "Orbitron", sans-serif; font-weight: 700;
+    font-size: 22px; color: var(--cyan); line-height: 1;
+  }
+  .gartner .g-datarow .dp .v .u {
+    font-size: 13px; color: var(--ink-1); margin-left: 3px; font-family: "Inter", sans-serif; font-weight: 500;
+  }
+  .gartner .g-datarow .dp .k {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--ink-2); letter-spacing: 1px; margin-top: 6px;
+  }
+  /* image card — original Gartner screenshot framed */
+  .image-card {
+    position: relative; border: 1px solid rgba(0,240,255,.3);
+    background: rgba(255,255,255,.02); padding: 8px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 28px rgba(0,240,255,0.08);
+  }
+  .image-card img { width: 100%; height: auto; display: block; }
+  .image-card .src-tag {
+    position: absolute; top: -10px; right: 16px;
+    font-family: "JetBrains Mono", monospace; font-size: 9px;
+    letter-spacing: 3px; color: var(--cyan);
+    background: var(--bg-0); padding: 2px 8px; border: 1px solid rgba(0,240,255,.3);
+  }
+  .image-card .corner-l, .image-card .corner-r {
+    position: absolute; width: 14px; height: 14px;
+    border-color: var(--cyan); border-style: solid; border-width: 0;
+  }
+  .image-card .corner-l { top: -3px; left: -3px; border-top-width: 1px; border-left-width: 1px; }
+  .image-card .corner-r { bottom: -3px; right: -3px; border-bottom-width: 1px; border-right-width: 1px; }
+
   /* ============ Slide: AI Heatmap ============ */
   .slide.heatmap { justify-content: center; gap: 16px; }
   .heatmap .hm-head {
@@ -835,6 +892,61 @@
           <span class="chip">高等教育</span>
           <span class="chip">咨询</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3a · 行业大势：GPT-2 时刻 ============ -->
+  <section class="slide gartner">
+    <div class="g-head">
+      <div class="eyebrow reveal reveal-1">INDUSTRY MOMENT · 行业坐标</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">我们站在 <em>哪一个</em> 时刻?</h2>
+    </div>
+    <div class="g-body">
+      <div class="g-text">
+        <div class="g-bigword reveal reveal-3">GPT-2 时刻</div>
+        <div class="g-lead reveal reveal-4">
+          <b>机器人产业</b>正处在大语言模型的 <span class="cy">"GPT-2 阶段"</span> ——
+          预期 1–2 年内进入 <b>GPT-3 时刻</b>,之后大规模量产。
+        </div>
+        <div class="g-datarow reveal reveal-5">
+          <div class="dp"><div class="v">1000<span class="u">万</span></div><div class="k">2030 制造业工人缺口</div></div>
+          <div class="dp"><div class="v">5–7<span class="u">万亿$</span></div><div class="k">2050 机器人市场规模</div></div>
+          <div class="dp"><div class="v">&lt;20<span class="u">家</span></div><div class="k">2028 正式上线公司</div></div>
+        </div>
+      </div>
+      <div class="image-card reveal reveal-4">
+        <span class="corner-l"></span><span class="corner-r"></span>
+        <span class="src-tag">GARTNER · 2026</span>
+        <img src="assets/gartner-gpt2.png" alt="GPT-2 moment of robotics — Gartner 2026" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3b · 机器人的"大脑" 五代演进 ============ -->
+  <section class="slide gartner">
+    <div class="g-head">
+      <div class="eyebrow reveal reveal-1">EVOLUTION · 大脑五代演进</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">机器人是 手 — <em>AI 是脑</em></h2>
+    </div>
+    <div class="g-body">
+      <div class="g-text">
+        <div class="g-lead reveal reveal-3">
+          机器人的"大脑"<b>经历了五代进化</b>:<br/>
+          从 1961 年的<b>可编程执行器</b>,<br/>
+          一路走到能看、能想、能动手的 <span class="cy">VLA 大模型时代</span>。
+        </div>
+        <div class="g-datarow reveal reveal-4">
+          <div class="dp"><div class="v">1961</div><div class="k">可编程机器人</div></div>
+          <div class="dp"><div class="v">2010</div><div class="k">模仿学习 · Google Brain</div></div>
+          <div class="dp"><div class="v">2016</div><div class="k">强化学习 · AlphaGo Zero</div></div>
+          <div class="dp"><div class="v">2023+</div><div class="k">VLA 大模型时代</div></div>
+        </div>
+      </div>
+      <div class="image-card reveal reveal-4">
+        <span class="corner-l"></span><span class="corner-r"></span>
+        <span class="src-tag">GARTNER · 2026</span>
+        <img src="assets/gartner-evolution.png" alt="Five generations of robot brain — Gartner 2026" />
       </div>
     </div>
   </section>

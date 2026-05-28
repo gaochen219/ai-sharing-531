@@ -3,7 +3,11 @@
 *.jpg
 *.jpeg
 *.png
+*.zip
+2026 Gartner*/
+assets/
 
 # 临时预览 / 截图
 _preview_*.html
 _*.png
+_*.html
