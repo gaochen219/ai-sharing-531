@@ -563,6 +563,167 @@
   .image-card .corner-l { top: -3px; left: -3px; border-top-width: 1px; border-left-width: 1px; }
   .image-card .corner-r { bottom: -3px; right: -3px; border-bottom-width: 1px; border-right-width: 1px; }
 
+  /* ============ Slide: AI 三要素 ============ */
+  .slide.ai-elements { justify-content: center; gap: 28px; }
+  .ai-elements .header { text-align: center; }
+  .ai-elements .ae-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    width: 100%; max-width: 1280px;
+  }
+  .ae-card {
+    position: relative; padding: 30px 26px;
+    border: 1px solid rgba(0,240,255,.2);
+    background: linear-gradient(180deg, rgba(0,240,255,.05), transparent);
+    overflow: hidden; transition: transform .3s, border-color .3s;
+  }
+  .ae-card:hover { transform: translateY(-4px); border-color: var(--cyan); }
+  .ae-card.data { border-color: rgba(255,43,214,.3); background: linear-gradient(180deg, rgba(255,43,214,.07), transparent); }
+  .ae-card .num {
+    font-family: "Orbitron", sans-serif; font-weight: 700;
+    font-size: 13px; color: var(--cyan); letter-spacing: 3px;
+  }
+  .ae-card.data .num { color: var(--magenta); }
+  .ae-card .icon {
+    font-family: "Orbitron", sans-serif; font-size: 44px;
+    color: var(--cyan); margin: 14px 0 10px; line-height: 1;
+  }
+  .ae-card.data .icon { color: var(--magenta); }
+  .ae-card h4 {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 800; font-size: 34px; color: var(--ink-0); letter-spacing: -0.5px;
+  }
+  .ae-card .en {
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--ink-2); letter-spacing: 3px; margin-top: 4px; text-transform: uppercase;
+  }
+  .ae-card .bullets {
+    margin-top: 20px; padding-top: 14px;
+    border-top: 1px dashed rgba(0,240,255,.18); list-style: none;
+  }
+  .ae-card.data .bullets { border-top-color: rgba(255,43,214,.2); }
+  .ae-card .bullets li {
+    color: var(--ink-1); font-size: 13.5px; line-height: 1.85;
+    padding-left: 14px; position: relative;
+  }
+  .ae-card .bullets li::before {
+    content: '▸'; position: absolute; left: 0; color: var(--cyan); font-size: 10px;
+  }
+  .ae-card.data .bullets li::before { color: var(--magenta); }
+  .ai-elements .punchline {
+    text-align: center; max-width: 1080px; padding: 14px 22px;
+    color: var(--ink-1); font-size: 18px; font-weight: 300; line-height: 1.7;
+  }
+  .ai-elements .punchline .hl { color: var(--magenta); font-weight: 600; }
+  .ai-elements .punchline .cy { color: var(--cyan); font-weight: 600; }
+
+  /* ============ Slide: π Profile ============ */
+  .slide.pi { justify-content: center; gap: 18px; }
+  .pi .pi-head {
+    width: 100%; max-width: 1320px;
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 36px;
+    align-items: flex-end;
+  }
+  .pi .pi-head .name-block .name {
+    font-family: "Inter", "Noto Sans SC", sans-serif;
+    font-weight: 800; font-size: 56px; letter-spacing: -1px; line-height: 1.05;
+    background: linear-gradient(180deg, #fff 0%, var(--cyan) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .pi .pi-head .name-block .en {
+    font-family: "Orbitron", sans-serif; font-size: 13px;
+    letter-spacing: 5px; color: var(--ink-2); margin-top: 4px;
+  }
+  .pi .pi-head .title-now {
+    font-family: "JetBrains Mono", monospace; font-size: 12.5px;
+    color: var(--cyan); letter-spacing: 1.2px; line-height: 1.85; margin-top: 16px;
+  }
+  .pi .pi-head .title-now .past { color: var(--ink-2); }
+  .pi .pi-head .bio-quote {
+    text-align: right; font-size: 16px; color: var(--ink-1);
+    line-height: 1.7; font-weight: 300;
+  }
+  .pi .pi-head .bio-quote b { color: var(--ink-0); font-weight: 600; }
+  .pi .pi-head .bio-quote .cy { color: var(--cyan); }
+  .pi .pi-head .bio-quote .mg { color: var(--magenta); }
+  .pi .pi-stage {
+    width: 100%; max-width: 1320px;
+    position: relative; padding-top: 12px;
+  }
+  .pi .pi-bar {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+    position: relative; padding-bottom: 18px;
+  }
+  .pi .pi-bar::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+    height: 2px; background: linear-gradient(90deg,
+      transparent 0%, var(--cyan) 12%, var(--cyan) 88%, transparent 100%);
+    box-shadow: 0 0 16px rgba(0,240,255,.5);
+  }
+  .pi-ind {
+    text-align: center; padding: 12px 6px;
+    border: 1px solid rgba(0,240,255,.2);
+    background: linear-gradient(180deg, rgba(0,240,255,.07), transparent);
+  }
+  .pi-ind .ind-name {
+    font-size: 14px; font-weight: 700; color: var(--ink-0); letter-spacing: -0.3px;
+  }
+  .pi-ind .ind-co {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--ink-2); letter-spacing: 0.4px; margin-top: 6px; line-height: 1.4;
+  }
+  .pi .pi-legs {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 36px;
+    position: relative;
+  }
+  .pi .pi-legs::before, .pi .pi-legs::after {
+    content: ''; position: absolute; top: 0; width: 2px; height: 30px;
+  }
+  .pi .pi-legs::before { left: 16%; background: linear-gradient(180deg, var(--cyan), transparent); box-shadow: 0 0 10px rgba(0,240,255,.4); }
+  .pi .pi-legs::after { right: 16%; background: linear-gradient(180deg, var(--magenta), transparent); box-shadow: 0 0 10px rgba(255,43,214,.4); }
+  .pi-leg {
+    margin-top: 36px; padding: 20px 22px;
+    border: 1px solid rgba(0,240,255,.25);
+    background: linear-gradient(180deg, rgba(0,240,255,.05), transparent);
+  }
+  .pi-leg.right { border-color: rgba(255,43,214,.28); background: linear-gradient(180deg, rgba(255,43,214,.06), transparent); }
+  .pi-leg .leg-head {
+    display: flex; align-items: baseline; gap: 14px;
+    padding-bottom: 10px; border-bottom: 1px dashed rgba(0,240,255,.2);
+  }
+  .pi-leg.right .leg-head { border-bottom-color: rgba(255,43,214,.22); }
+  .pi-leg .leg-head .v {
+    font-family: "Orbitron", sans-serif; font-weight: 700;
+    font-size: 22px; color: var(--cyan); letter-spacing: 2px;
+  }
+  .pi-leg.right .leg-head .v { color: var(--magenta); }
+  .pi-leg .leg-head .en {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--ink-2); letter-spacing: 2px;
+  }
+  .pi-leg .skills {
+    list-style: none; margin-top: 10px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4px 18px;
+  }
+  .pi-leg .skills li {
+    color: var(--ink-1); font-size: 12.5px; line-height: 1.7;
+    padding-left: 13px; position: relative;
+  }
+  .pi-leg .skills li::before {
+    content: '▸'; position: absolute; left: 0; color: var(--cyan); font-size: 9px;
+  }
+  .pi-leg.right .skills li::before { color: var(--magenta); }
+  .pi .pi-mark {
+    margin-top: 14px; text-align: center;
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--ink-3); letter-spacing: 3px;
+  }
+  .pi .pi-mark .sym {
+    font-family: "Cormorant Garamond", "Inter", serif; font-size: 30px;
+    color: var(--cyan); font-style: italic; margin: 0 10px; vertical-align: -6px;
+  }
+  .pi .pi-mark .cy { color: var(--cyan); }
+  .pi .pi-mark .mg { color: var(--magenta); }
+
   /* ============ Slide: AI Heatmap ============ */
   .slide.heatmap { justify-content: center; gap: 16px; }
   .heatmap .hm-head {
@@ -802,11 +963,9 @@
   <div class="left">
     <span class="dot"></span>
     <span class="label">LIVE · 现场分享</span>
-    <span>·</span>
-    <span>AI · DATA · STRATEGY</span>
   </div>
   <div class="right">
-    <span class="now">2026 · 机器人餐厅开业</span>
+    <span class="now">Robo Space · 2026</span>
     <span>·</span>
     <span id="clock">--:--:--</span>
   </div>
@@ -825,13 +984,13 @@
     </h1>
     <div class="h-line reveal reveal-4">
       <span class="bar"></span>
-      <span>15 MIN · KEYNOTE · 中文分享</span>
+      <span>AI × BIG DATA × SCENE RE-ARCHITECT</span>
       <span class="bar"></span>
     </div>
     <div class="meta-row reveal reveal-5">
       <div><div class="k">SPEAKER</div><div class="v">Chen Gao · 高 晨</div></div>
       <div><div class="k">ROLE</div><div class="v">VP · Big Data & AI · GLP</div></div>
-      <div><div class="k">VENUE</div><div class="v">Robot Restaurant · 开业首秀</div></div>
+      <div><div class="k">VENUE</div><div class="v">Robo Space · 开业首秀</div></div>
     </div>
   </section>
 
@@ -851,47 +1010,110 @@
     </div>
   </section>
 
-  <!-- ============ 3 · About ============ -->
-  <section class="slide about">
-    <div class="left">
-      <div class="eyebrow reveal reveal-1">SPEAKER · 关于我</div>
-      <div class="name-row reveal reveal-2">
-        <h2>高 晨</h2>
-        <div class="en">CHEN&nbsp;GAO</div>
+  <!-- ============ 3 · AI 三要素 ============ -->
+  <section class="slide ai-elements">
+    <div class="header">
+      <div class="eyebrow center reveal reveal-1">FUNDAMENTALS · AI 的底层支柱</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">AI 的 <em>三大要素</em></h2>
+    </div>
+    <div class="ae-grid">
+      <div class="ae-card reveal reveal-3">
+        <div class="num">01 / ALGORITHM</div>
+        <div class="icon">⌬</div>
+        <h4>算法</h4>
+        <div class="en">Algorithm</div>
+        <ul class="bullets">
+          <li>从规则到学习,从专才到通用</li>
+          <li>大模型 · 强化学习 · VLA</li>
+          <li>开源化、平民化</li>
+        </ul>
       </div>
-      <div class="title-now reveal reveal-3">
-        ▸ GLP · VP · Big Data & AI（现任）<br/>
-        ▸ Ex-CDO · Decathlon China · 迪卡侬中国<br/>
-        ▸ Ex-Alibaba · 阿里巴巴（盒马 / 夸克 / 阿里云 / 天猫）
+      <div class="ae-card reveal reveal-4">
+        <div class="num">02 / COMPUTE</div>
+        <div class="icon">▤</div>
+        <h4>算力</h4>
+        <div class="en">Compute</div>
+        <ul class="bullets">
+          <li>GPU / TPU · 分布式训练</li>
+          <li>云计算 · 端侧推理</li>
+          <li>成本 ↓ · 规模 ↑</li>
+        </ul>
       </div>
-      <div class="bio reveal reveal-4">
-        <strong>15+ 年</strong>跨行业的数据与 AI 实战 — 把一行行业务问题，
-        翻译成<strong class="text-cyan">可被算法重构</strong>的场景。
+      <div class="ae-card data reveal reveal-5">
+        <div class="num">03 / DATA</div>
+        <div class="icon">◈</div>
+        <h4>数据</h4>
+        <div class="en">Data</div>
+        <ul class="bullets">
+          <li>训练 · 标注 · 治理</li>
+          <li>场景 · 行业 · 私域</li>
+          <li>"AI 的燃料"</li>
+        </ul>
       </div>
     </div>
-    <div class="right">
-      <div class="stat-cell reveal reveal-3">
-        <div class="num">6</div>
-        <div class="label">Industries<span class="cn">跨 6 大行业</span></div>
-      </div>
-      <div class="stat-cell reveal reveal-4">
-        <div class="num">9</div>
-        <div class="label">Capabilities<span class="cn">9 个能力域</span></div>
-      </div>
-      <div class="stat-cell reveal reveal-5">
-        <div class="num">43</div>
-        <div class="label">Techniques<span class="cn">43 项技术方法</span></div>
-      </div>
-      <div class="stat-cell span2 reveal reveal-6">
-        <div class="label" style="margin-top:0">SECTORS · 跨越的行业</div>
-        <div class="industries">
-          <span class="chip">物流地产</span>
-          <span class="chip">零售</span>
-          <span class="chip">互联网 · 电商</span>
-          <span class="chip">医疗健康</span>
-          <span class="chip">高等教育</span>
-          <span class="chip">咨询</span>
+    <div class="punchline reveal reveal-6">
+      算法与算力日渐同质化的今天 — <span class="hl">数据</span> 才是真正的护城河。<br/>
+      这也是我的旅程: 从 <span class="hl">数据</span> 出发,通向 <span class="cy">AI</span>。
+    </div>
+  </section>
+
+  <!-- ============ 4 · About · π Profile ============ -->
+  <section class="slide pi">
+    <div class="pi-head">
+      <div class="name-block">
+        <div class="eyebrow reveal reveal-1">SPEAKER · 关于我</div>
+        <div class="name reveal reveal-2" style="margin-top:12px">高 晨</div>
+        <div class="en reveal reveal-2">CHEN&nbsp;GAO</div>
+        <div class="title-now reveal reveal-3">
+          ▸ VP · Big Data & AI · GLP（普洛斯）现任<br/>
+          ▸ ex-CDO（Chief Data Officer）· Decathlon China · 迪卡侬<br/>
+          <span class="past">▸ ex-Alibaba · 阿里 · 盒马 / 夸克 / 阿里云 / 天猫<br/>
+          ▸ ex-J&amp;J Ethicon · 强生 &nbsp;·&nbsp; ex-Novartis / KMK · 诺华<br/>
+          ▸ ex-University of Washington · 华盛顿大学</span>
         </div>
+      </div>
+      <div class="bio-quote reveal reveal-3">
+        跨 <b class="cy">6 大行业</b>,<br/>
+        在 <b class="cy">大数据</b> 与 <b class="mg">AI</b> 两条专业线上<br/>
+        <b>15+ 年</b> 深耕。
+      </div>
+    </div>
+
+    <div class="pi-stage">
+      <div class="pi-bar reveal reveal-4">
+        <div class="pi-ind"><div class="ind-name">物流地产</div><div class="ind-co">GLP · 普洛斯</div></div>
+        <div class="pi-ind"><div class="ind-name">零售</div><div class="ind-co">Decathlon · 迪卡侬</div></div>
+        <div class="pi-ind"><div class="ind-name">互联网</div><div class="ind-co">Alibaba · 阿里</div></div>
+        <div class="pi-ind"><div class="ind-name">医疗健康</div><div class="ind-co">J&amp;J · Novartis</div></div>
+        <div class="pi-ind"><div class="ind-name">高等教育</div><div class="ind-co">U. of Washington</div></div>
+        <div class="pi-ind"><div class="ind-name">咨询</div><div class="ind-co">KMK Consulting</div></div>
+      </div>
+      <div class="pi-legs">
+        <div class="pi-leg reveal reveal-5">
+          <div class="leg-head"><span class="v">BIG DATA</span><span class="en">大数据</span></div>
+          <ul class="skills">
+            <li>数据基座 / 数据中台</li>
+            <li>多维数据建模</li>
+            <li>BI &amp; Analytics</li>
+            <li>商品 / 用户 / 销售分析</li>
+            <li>A/B 测试 · 漏斗 · 留存</li>
+            <li>数据治理 · 合规</li>
+          </ul>
+        </div>
+        <div class="pi-leg right reveal reveal-5">
+          <div class="leg-head"><span class="v">AI</span><span class="en">人工智能</span></div>
+          <ul class="skills">
+            <li>AI 中台 · 战略路线图</li>
+            <li>LLM · RAG · Agent</li>
+            <li>XGBoost / LightGBM / K-Means</li>
+            <li>预测 · 选址 · 定价 · 排班</li>
+            <li>因果推断 · MMM</li>
+            <li>AI 合规治理</li>
+          </ul>
+        </div>
+      </div>
+      <div class="pi-mark reveal reveal-6">
+        <span class="sym">π</span> 一横 = <span class="cy">6 大行业</span> &nbsp;·&nbsp; 两纵 = <span class="cy">大数据</span> · <span class="mg">AI</span>
       </div>
     </div>
   </section>
@@ -1065,72 +1287,161 @@
     </div>
   </section>
 
-  <!-- ============ 11 · Restaurant — back to topic ============ -->
-  <section class="slide restaurant">
-    <div class="header">
-      <div class="eyebrow center reveal reveal-1">BACK TO THE TOPIC · 回到机器人餐厅</div>
-      <h2 class="title reveal reveal-2" style="margin-top:18px">如果是这家餐厅 — <em>AI 能重构什么?</em></h2>
-      <h3 class="sub reveal reveal-3" style="margin-top:14px">机器人是"前台",AI 才是"操作系统" — 同一套"场景重构"方法,跨行业验证过,餐厅一样适用。</h3>
+  <!-- ============ Q1 · 低谷期价值 ============ -->
+  <section class="slide gartner">
+    <div class="g-head">
+      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 01</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">热潮 <em>退去之后</em></h2>
     </div>
-    <div class="grid">
-      <div class="r-card reveal reveal-3">
-        <div class="icon-r">01</div>
-        <h4>选址</h4>
-        <div class="en">SITE</div>
-        <div class="rc-flow">
-          <span class="was">老师傅走商圈、拍脑袋</span>
-          <span class="ar">↓ AI 重构</span>
-          <span class="now">多源数据建模,预测单店产出与商圈潜力</span>
+    <div class="g-body">
+      <div class="g-text">
+        <div class="g-bigword reveal reveal-3">低谷期的价值</div>
+        <div class="g-lead reveal reveal-4">
+          <b>"真正的价值,产生在低谷期阶段。"</b><br/>
+          AI 的炒作峰已过 —— <span class="cy">现在</span>,才是把场景重新做一遍的窗口。
         </div>
-        <div class="tag">▸ 选址准确率显著提升</div>
       </div>
-      <div class="r-card reveal reveal-4">
-        <div class="icon-r">02</div>
-        <h4>选品 · 菜单</h4>
-        <div class="en">MENU</div>
-        <div class="rc-flow">
-          <span class="was">凭经验上新、人工汰换</span>
-          <span class="ar">↓ AI 重构</span>
-          <span class="now">商品矩阵 + 蚕食分析,自动找爆品与拖累项</span>
-        </div>
-        <div class="tag">▸ 爆品命中率↑ · 长尾↓</div>
-      </div>
-      <div class="r-card reveal reveal-5">
-        <div class="icon-r">03</div>
-        <h4>定价</h4>
-        <div class="en">PRICING</div>
-        <div class="rc-flow">
-          <span class="was">对标竞品、统一定价</span>
-          <span class="ar">↓ AI 重构</span>
-          <span class="now">价格弹性 + 时段动态定价,逐品寻优</span>
-        </div>
-        <div class="tag">▸ 决策周期大幅压缩</div>
-      </div>
-      <div class="r-card reveal reveal-5">
-        <div class="icon-r">04</div>
-        <h4>排班</h4>
-        <div class="en">OPERATION</div>
-        <div class="rc-flow">
-          <span class="was">固定班表、人机各管各</span>
-          <span class="ar">↓ AI 重构</span>
-          <span class="now">客流预测驱动人机协同排班</span>
-        </div>
-        <div class="tag">▸ 工时趋近零浪费</div>
-      </div>
-      <div class="r-card reveal reveal-6">
-        <div class="icon-r">05</div>
-        <h4>体验</h4>
-        <div class="en">EXPERIENCE</div>
-        <div class="rc-flow">
-          <span class="was">标准化、千人一面</span>
-          <span class="ar">↓ AI 重构</span>
-          <span class="now">Agent 点单 + 记忆口味的个性化服务</span>
-        </div>
-        <div class="tag">▸ 千人千味 · 复购↑</div>
+      <div class="image-card reveal reveal-4">
+        <span class="corner-l"></span><span class="corner-r"></span>
+        <span class="src-tag">GARTNER · 2026</span>
+        <img src="assets/gartner-trough.png" alt="The real value comes in the trough — Gartner 2026" />
       </div>
     </div>
-    <div class="punchline reveal reveal-6">
-      机器人解决"<span class="text-mute">做菜的手</span>",AI 解决"<span class="hl">做生意的脑</span>"。
+  </section>
+
+  <!-- ============ Q2 · 智能体不取代人 ============ -->
+  <section class="slide gartner">
+    <div class="g-head">
+      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 02</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">人 vs <em>智能体</em></h2>
+    </div>
+    <div class="g-body">
+      <div class="g-text">
+        <div class="g-bigword reveal reveal-3">智能体 ≠ 人</div>
+        <div class="g-lead reveal reveal-4">
+          <b>"智能体不会取代人类员工 — 智能体与人类完全不同。"</b><br/>
+          机器人扩展<span class="cy">手</span>,AI 扩展<span class="cy">脑</span> ——<br/>
+          人,仍然是<b>意图与价值</b>的来源。
+        </div>
+      </div>
+      <div class="image-card reveal reveal-4">
+        <span class="corner-l"></span><span class="corner-r"></span>
+        <span class="src-tag">GARTNER · 2026</span>
+        <img src="assets/gartner-agent-human.png" alt="Agents will not replace humans — Gartner 2026" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Q3 · 三大焦虑 ============ -->
+  <section class="slide gartner">
+    <div class="g-head">
+      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 03</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">高管 <em>到底在焦虑什么</em></h2>
+    </div>
+    <div class="g-body">
+      <div class="g-text">
+        <div class="g-bigword reveal reveal-3">现金流 · 能力 · 竞争力</div>
+        <div class="g-lead reveal reveal-4">
+          <b>"三个对话的存在,源于三大焦虑:现金流、能力、竞争力。"</b><br/>
+          这也是为什么 AI 不是技术议题 — 它是 <span class="cy">CEO 议题</span>。
+        </div>
+      </div>
+      <div class="image-card reveal reveal-4">
+        <span class="corner-l"></span><span class="corner-r"></span>
+        <span class="src-tag">GARTNER · 2026</span>
+        <img src="assets/gartner-3anxiety.png" alt="Three anxieties — Gartner 2026" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Q4 · Decision Intelligence ============ -->
+  <section class="slide gartner">
+    <div class="g-head">
+      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 04</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">方法论的 <em>名字</em></h2>
+    </div>
+    <div class="g-body">
+      <div class="g-text">
+        <div class="g-bigword reveal reveal-3">Decision<br/>Intelligence</div>
+        <div class="g-lead reveal reveal-4">
+          Gartner 把"用 AI 重塑决策"称为 <b>决策智能</b> ——<br/>
+          一门 <span class="cy">提升决策质量</span> 的实践学科。<br/>
+          我接下来要讲的"<b>场景重构</b>",就是它的落地。
+        </div>
+      </div>
+      <div class="image-card reveal reveal-4">
+        <span class="corner-l"></span><span class="corner-r"></span>
+        <span class="src-tag">GARTNER · 2026</span>
+        <img src="assets/gartner-di-def.png" alt="Decision Intelligence definition — Gartner 2026" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Q5 · AI 装配线 ============ -->
+  <section class="slide gartner">
+    <div class="g-head">
+      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 05</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">放大 <em>价值</em></h2>
+    </div>
+    <div class="g-body">
+      <div class="g-text">
+        <div class="g-bigword reveal reveal-3">构建 AI 装配线</div>
+        <div class="g-lead reveal reveal-4">
+          <b>"放大价值,需要构建 AI 装配线。"</b><br/>
+          从一次次的 PoC —— 到工业化产线。<br/>
+          AI 装配线 = 把"<span class="cy">试点</span>"变成"<span class="cy">流水线</span>"。
+        </div>
+      </div>
+      <div class="image-card reveal reveal-4">
+        <span class="corner-l"></span><span class="corner-r"></span>
+        <span class="src-tag">GARTNER · 2026</span>
+        <img src="assets/gartner-pipeline.png" alt="Build AI assembly line — Gartner 2026" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Q6 · 终结人工审批工厂 ============ -->
+  <section class="slide gartner">
+    <div class="g-head">
+      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 06</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">夯实 <em>基础</em></h2>
+    </div>
+    <div class="g-body">
+      <div class="g-text">
+        <div class="g-bigword reveal reveal-3">终结"人工审批工厂"</div>
+        <div class="g-lead reveal reveal-4">
+          <b>"夯实基础,需要终结'人工审批工厂'。"</b><br/>
+          审批流、汇报流、巡检流 —— <br/>
+          一切被<span class="cy">"人当机器"</span>在做的事,都该让 AI 接走。
+        </div>
+      </div>
+      <div class="image-card reveal reveal-4">
+        <span class="corner-l"></span><span class="corner-r"></span>
+        <span class="src-tag">GARTNER · 2026</span>
+        <img src="assets/gartner-end-factory.png" alt="End manual approval factory — Gartner 2026" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Q7 · 规模化 ============ -->
+  <section class="slide gartner">
+    <div class="g-head">
+      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 07</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">规模化 <em>的本质</em></h2>
+    </div>
+    <div class="g-body">
+      <div class="g-text">
+        <div class="g-bigword reveal reveal-3">积累过程资产</div>
+        <div class="g-lead reveal reveal-4">
+          <b>"规模化的本质,在于积累过程资产 —— <br/>
+          用以提升企业构建下一个用例的<span class="cy">速度、性价比、可靠性</span>。"</b>
+        </div>
+      </div>
+      <div class="image-card reveal reveal-4">
+        <span class="corner-l"></span><span class="corner-r"></span>
+        <span class="src-tag">GARTNER · 2026</span>
+        <img src="assets/gartner-scale.png" alt="Scaling = accumulating process assets — Gartner 2026" />
+      </div>
     </div>
   </section>
 
