@@ -650,8 +650,18 @@
     position: relative; padding-top: 12px;
   }
   .pi .pi-bar {
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+    display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px;
     position: relative; padding-bottom: 18px;
+  }
+  .pi-ind.glp { border-color: rgba(0,240,255,.5); background: linear-gradient(180deg, rgba(0,240,255,.13), transparent); }
+  .pi .pi-bar .glp-group-tag {
+    position: absolute; top: -22px; left: 0; width: 39%; text-align: center;
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    letter-spacing: 3px; color: var(--cyan); text-transform: uppercase;
+  }
+  .pi .pi-bar .glp-group-tag::after {
+    content: ''; display: block; height: 1px; margin-top: 4px;
+    background: linear-gradient(90deg, transparent 0%, var(--cyan) 8%, var(--cyan) 92%, transparent 100%);
   }
   .pi .pi-bar::after {
     content: ''; position: absolute; left: 0; right: 0; bottom: 0;
@@ -723,6 +733,72 @@
   }
   .pi .pi-mark .cy { color: var(--cyan); }
   .pi .pi-mark .mg { color: var(--magenta); }
+
+  /* ============ π Hero (large π glyph on about slide) ============ */
+  .pi .pi-head { grid-template-columns: 1.3fr 0.7fr; align-items: center; }
+  .pi .pi-glyph-block {
+    text-align: right; display: flex; flex-direction: column;
+    align-items: flex-end; gap: 4px;
+  }
+  .pi .pi-glyph-block .pi-glyph {
+    font-family: "Cormorant Garamond", "Inter", serif;
+    font-size: 180px; font-style: italic; line-height: 0.85;
+    color: var(--cyan);
+    text-shadow: 0 0 30px rgba(0,240,255,.55), 0 0 80px rgba(0,240,255,.3);
+    margin-bottom: -8px;
+  }
+  .pi .pi-glyph-block .pi-tagline {
+    font-family: "JetBrains Mono", monospace; font-size: 10.5px;
+    letter-spacing: 4px; color: var(--cyan); text-transform: uppercase;
+  }
+  .pi .pi-glyph-block .pi-bio {
+    margin-top: 10px; text-align: right; font-size: 14px;
+    color: var(--ink-1); font-weight: 300; line-height: 1.65;
+  }
+  .pi .pi-glyph-block .pi-bio b { color: var(--ink-0); font-weight: 600; }
+  .pi .pi-glyph-block .pi-bio .cy { color: var(--cyan); font-weight: 600; }
+  .pi .pi-glyph-block .pi-bio .mg { color: var(--magenta); font-weight: 600; }
+  /* compact pi-ind for 10-column */
+  .pi-ind { padding: 10px 4px; }
+  .pi-ind .ind-name { font-size: 12.5px; }
+  .pi-ind .ind-co { font-size: 9.5px; }
+
+  /* ============ AI 三要素 — Q & A reveal ============ */
+  .slide.ai-elements[data-step="0"] .ae-card .ae-answer { display: none; }
+  .slide.ai-elements[data-step="0"] .ae-card .ae-question { display: flex; }
+  .slide.ai-elements[data-step="0"] .punchline { display: none; }
+  .slide.ai-elements[data-step="1"] .ae-prompt { display: none; }
+  .slide.ai-elements[data-step="1"] .ae-card .ae-question { display: none; }
+  .slide.ai-elements[data-step="1"] .ae-card .ae-answer { display: block; animation: aeReveal .6s cubic-bezier(0.16,1,0.3,1) both; }
+  .slide.ai-elements[data-step="1"] .ae-card:nth-of-type(2) .ae-answer { animation-delay: .12s; }
+  .slide.ai-elements[data-step="1"] .ae-card:nth-of-type(3) .ae-answer { animation-delay: .24s; }
+  .ae-card .ae-question {
+    min-height: 230px; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; text-align: center;
+  }
+  .ae-card .ae-question .qmark {
+    font-family: "Orbitron", sans-serif; font-weight: 700;
+    font-size: 110px; line-height: 1; color: var(--cyan);
+    text-shadow: 0 0 32px rgba(0,240,255,.55), 0 0 80px rgba(0,240,255,.25);
+    animation: pulseQ 2s ease-in-out infinite;
+  }
+  .ae-card.data .ae-question .qmark { color: var(--magenta); text-shadow: 0 0 32px rgba(255,43,214,.55), 0 0 80px rgba(255,43,214,.25); }
+  .ae-card .ae-question .qlabel {
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    letter-spacing: 3px; color: var(--ink-3); text-transform: uppercase;
+  }
+  @keyframes pulseQ { 0%, 100% { opacity: .92; transform: scale(1); } 50% { opacity: .55; transform: scale(.94); } }
+  @keyframes aeReveal { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+  .ai-elements .ae-prompt {
+    text-align: center; font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 3.5px; text-transform: uppercase;
+    color: var(--cyan); transition: color .35s, opacity .35s;
+  }
+  .ai-elements[data-step="1"] .ae-prompt { color: var(--ink-3); opacity: 0.7; }
+  .ai-elements .ae-prompt kbd {
+    border: 1px solid currentColor; padding: 2px 7px; border-radius: 3px;
+    font-family: "JetBrains Mono", monospace; font-size: 10px; margin: 0 4px;
+  }
 
   /* ============ Slide: AI Heatmap ============ */
   .slide.heatmap { justify-content: center; gap: 16px; }
@@ -989,7 +1065,7 @@
     </div>
     <div class="meta-row reveal reveal-5">
       <div><div class="k">SPEAKER</div><div class="v">Chen Gao · 高 晨</div></div>
-      <div><div class="k">ROLE</div><div class="v">VP · Big Data & AI · GLP</div></div>
+      <div><div class="k">EXPERTISE</div><div class="v">Big Data & AI</div></div>
       <div><div class="k">VENUE</div><div class="v">Robo Space · 开业首秀</div></div>
     </div>
   </section>
@@ -1005,51 +1081,72 @@
       而在它<span class="key">背后做决策的 AI</span> 上。
     </div>
     <div class="footnote reveal reveal-3">
-      // 机器人是"执行"，AI 是"重构"。<br/>
-      // 接下来 15 分钟，我想告诉你 — AI 怎么把每一个场景重做一遍。
+      // 机器人是"执行"，AI 是"重构" — 这不是提效，是一次<b style="color:var(--magenta)">行业级的颠覆</b>。<br/>
+      // 接下来 15 分钟，我讲讲怎么把每一个场景重做一遍。
     </div>
   </section>
 
-  <!-- ============ 3 · AI 三要素 ============ -->
-  <section class="slide ai-elements">
+  <!-- ============ 3 · AI 三要素 · Q&A reveal ============ -->
+  <section class="slide ai-elements" data-substeps="1" data-step="0">
     <div class="header">
       <div class="eyebrow center reveal reveal-1">FUNDAMENTALS · AI 的底层支柱</div>
-      <h2 class="title reveal reveal-2" style="margin-top:14px">AI 的 <em>三大要素</em></h2>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">AI 的 <em>三大要素</em> 是什么?</h2>
     </div>
     <div class="ae-grid">
       <div class="ae-card reveal reveal-3">
-        <div class="num">01 / ALGORITHM</div>
-        <div class="icon">⌬</div>
-        <h4>算法</h4>
-        <div class="en">Algorithm</div>
-        <ul class="bullets">
-          <li>从规则到学习,从专才到通用</li>
-          <li>大模型 · 强化学习 · VLA</li>
-          <li>开源化、平民化</li>
-        </ul>
+        <div class="ae-question">
+          <div class="qmark">?</div>
+          <div class="qlabel">ELEMENT &nbsp;01</div>
+        </div>
+        <div class="ae-answer">
+          <div class="num">01 / ALGORITHM</div>
+          <div class="icon">⌬</div>
+          <h4>算法</h4>
+          <div class="en">Algorithm</div>
+          <ul class="bullets">
+            <li>从规则到学习,从专才到通用</li>
+            <li>大模型 · 强化学习 · VLA</li>
+            <li>开源化、平民化</li>
+          </ul>
+        </div>
       </div>
       <div class="ae-card reveal reveal-4">
-        <div class="num">02 / COMPUTE</div>
-        <div class="icon">▤</div>
-        <h4>算力</h4>
-        <div class="en">Compute</div>
-        <ul class="bullets">
-          <li>GPU / TPU · 分布式训练</li>
-          <li>云计算 · 端侧推理</li>
-          <li>成本 ↓ · 规模 ↑</li>
-        </ul>
+        <div class="ae-question">
+          <div class="qmark">?</div>
+          <div class="qlabel">ELEMENT &nbsp;02</div>
+        </div>
+        <div class="ae-answer">
+          <div class="num">02 / COMPUTE</div>
+          <div class="icon">▤</div>
+          <h4>算力</h4>
+          <div class="en">Compute</div>
+          <ul class="bullets">
+            <li>GPU / TPU · 分布式训练</li>
+            <li>云计算 · 端侧推理</li>
+            <li>成本 ↓ · 规模 ↑</li>
+          </ul>
+        </div>
       </div>
       <div class="ae-card data reveal reveal-5">
-        <div class="num">03 / DATA</div>
-        <div class="icon">◈</div>
-        <h4>数据</h4>
-        <div class="en">Data</div>
-        <ul class="bullets">
-          <li>训练 · 标注 · 治理</li>
-          <li>场景 · 行业 · 私域</li>
-          <li>"AI 的燃料"</li>
-        </ul>
+        <div class="ae-question">
+          <div class="qmark">?</div>
+          <div class="qlabel">ELEMENT &nbsp;03</div>
+        </div>
+        <div class="ae-answer">
+          <div class="num">03 / DATA</div>
+          <div class="icon">◈</div>
+          <h4>数据</h4>
+          <div class="en">Data</div>
+          <ul class="bullets">
+            <li>训练 · 标注 · 治理</li>
+            <li>场景 · 行业 · 私域</li>
+            <li>"AI 的燃料"</li>
+          </ul>
+        </div>
       </div>
+    </div>
+    <div class="ae-prompt reveal reveal-6">
+      PRESS <kbd>SPACE</kbd> TO REVEAL · 按 <kbd>空格</kbd> 揭晓
     </div>
     <div class="punchline reveal reveal-6">
       算法与算力日渐同质化的今天 — <span class="hl">数据</span> 才是真正的护城河。<br/>
@@ -1068,25 +1165,33 @@
           ▸ VP · Big Data & AI · GLP（普洛斯）现任<br/>
           ▸ ex-CDO（Chief Data Officer）· Decathlon China · 迪卡侬<br/>
           <span class="past">▸ ex-Alibaba · 阿里 · 盒马 / 夸克 / 阿里云 / 天猫<br/>
-          ▸ ex-J&amp;J Ethicon · 强生 &nbsp;·&nbsp; ex-Novartis / KMK · 诺华<br/>
+          ▸ ex-J&amp;J Ethicon · 强生 &nbsp;·&nbsp; ex-Novartis · 诺华<br/>
           ▸ ex-University of Washington · 华盛顿大学</span>
         </div>
       </div>
-      <div class="bio-quote reveal reveal-3">
-        跨 <b class="cy">6 大行业</b>,<br/>
-        在 <b class="cy">大数据</b> 与 <b class="mg">AI</b> 两条专业线上<br/>
-        <b>15+ 年</b> 深耕。
+      <div class="pi-glyph-block reveal reveal-2">
+        <span class="pi-glyph">π</span>
+        <div class="pi-tagline">π-SHAPED EXPERT</div>
+        <div class="pi-bio">
+          跨 <b class="cy">10 大行业</b>,在 <b class="cy">大数据</b> 与 <b class="mg">AI</b><br/>
+          两条专业线上 <b>15+ 年</b> 深耕。
+        </div>
       </div>
     </div>
 
     <div class="pi-stage">
       <div class="pi-bar reveal reveal-4">
-        <div class="pi-ind"><div class="ind-name">物流地产</div><div class="ind-co">GLP · 普洛斯</div></div>
-        <div class="pi-ind"><div class="ind-name">零售</div><div class="ind-co">Decathlon · 迪卡侬</div></div>
-        <div class="pi-ind"><div class="ind-name">互联网</div><div class="ind-co">Alibaba · 阿里</div></div>
-        <div class="pi-ind"><div class="ind-name">医疗健康</div><div class="ind-co">J&amp;J · Novartis</div></div>
-        <div class="pi-ind"><div class="ind-name">高等教育</div><div class="ind-co">U. of Washington</div></div>
-        <div class="pi-ind"><div class="ind-name">咨询</div><div class="ind-co">KMK Consulting</div></div>
+        <div class="glp-group-tag">GLP · 普洛斯</div>
+        <div class="pi-ind glp"><div class="ind-name">物流地产</div><div class="ind-co">REAL ESTATE</div></div>
+        <div class="pi-ind glp"><div class="ind-name">新能源</div><div class="ind-co">NEW ENERGY</div></div>
+        <div class="pi-ind glp"><div class="ind-name">IDC</div><div class="ind-co">DATA CENTER</div></div>
+        <div class="pi-ind glp"><div class="ind-name">金融</div><div class="ind-co">FINANCE</div></div>
+        <div class="pi-ind"><div class="ind-name">零售</div><div class="ind-co">Decathlon</div></div>
+        <div class="pi-ind"><div class="ind-name">电商</div><div class="ind-co">盒马 · 天猫</div></div>
+        <div class="pi-ind"><div class="ind-name">互联网</div><div class="ind-co">夸克 · UC</div></div>
+        <div class="pi-ind"><div class="ind-name">云计算</div><div class="ind-co">阿里云</div></div>
+        <div class="pi-ind"><div class="ind-name">医疗</div><div class="ind-co">J&amp;J · Novartis</div></div>
+        <div class="pi-ind"><div class="ind-name">教育</div><div class="ind-co">U. of Washington</div></div>
       </div>
       <div class="pi-legs">
         <div class="pi-leg reveal reveal-5">
@@ -1096,7 +1201,7 @@
             <li>多维数据建模</li>
             <li>BI &amp; Analytics</li>
             <li>商品 / 用户 / 销售分析</li>
-            <li>A/B 测试 · 漏斗 · 留存</li>
+            <li>归因分析 · 预测分析</li>
             <li>数据治理 · 合规</li>
           </ul>
         </div>
@@ -1104,16 +1209,16 @@
           <div class="leg-head"><span class="v">AI</span><span class="en">人工智能</span></div>
           <ul class="skills">
             <li>AI 中台 · 战略路线图</li>
-            <li>LLM · RAG · Agent</li>
+            <li>RAG · Agent · Skill</li>
             <li>XGBoost / LightGBM / K-Means</li>
             <li>预测 · 选址 · 定价 · 排班</li>
-            <li>因果推断 · MMM</li>
+            <li>Embedding · Fine-tuning · MCP</li>
             <li>AI 合规治理</li>
           </ul>
         </div>
       </div>
       <div class="pi-mark reveal reveal-6">
-        <span class="sym">π</span> 一横 = <span class="cy">6 大行业</span> &nbsp;·&nbsp; 两纵 = <span class="cy">大数据</span> · <span class="mg">AI</span>
+        一横 = <span class="cy">10 大行业</span> &nbsp;·&nbsp; 两纵 = <span class="cy">大数据</span> · <span class="mg">AI</span>
       </div>
     </div>
   </section>
@@ -1184,7 +1289,7 @@
     </div>
     <div class="sub-line reveal reveal-3">
       不是"加一个 AI 功能"，<br/>
-      而是用 AI <span class="hl">重新定义场景里的每一个决策</span>。
+      是用 AI <span class="hl">颠覆</span>场景里的<span class="hl">每一个决策</span>。
     </div>
     <div class="footer-note reveal reveal-4">
       // SMART = AI'S ABILITY TO RE-ARCHITECT A SCENE
@@ -1287,6 +1392,53 @@
     </div>
   </section>
 
+  <!-- ============ 6a · 个人项目热力图 · 实战版 ============ -->
+  <section class="slide heatmap">
+    <div class="hm-head">
+      <div class="left">
+        <div class="eyebrow reveal reveal-1">PERSONAL TRACK · 实战版热力图</div>
+        <h2 class="title reveal reveal-2" style="margin-top:14px">在不同行业 <em>跑过的版本</em></h2>
+      </div>
+      <div class="hm-legend reveal reveal-2">
+        <span class="lg"><i class="sw high"></i>深度落地</span>
+        <span class="lg"><i class="sw mid"></i>有过实战</span>
+        <span class="lg"><i class="sw low"></i>未做过</span>
+        <span class="lg-note">个人经验 · MY TRACK</span>
+      </div>
+    </div>
+    <div class="hm-wrap reveal reveal-3">
+      <table class="hm-table">
+        <thead>
+          <tr>
+            <th class="corner">场景 \ 技术</th>
+            <th>生成式<br/>模型</th>
+            <th>非生成式<br/>机器学习</th>
+            <th>优化</th>
+            <th>模拟</th>
+            <th>规则<br/>启发式</th>
+            <th>图技术</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-label">AI 选址</td><td class="cell l">L</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell m">M</td><td class="cell l">L</td><td class="cell m">M</td></tr>
+          <tr><td class="row-label">AI 选品</td><td class="cell m">M</td><td class="cell h">H</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell m">M</td><td class="cell m">M</td></tr>
+          <tr><td class="row-label">AI 预测</td><td class="cell l">L</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell l">L</td></tr>
+          <tr><td class="row-label">价格弹性</td><td class="cell l">L</td><td class="cell h">H</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell l">L</td><td class="cell l">L</td></tr>
+          <tr><td class="row-label">AI 合同识别</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell m">M</td><td class="cell l">L</td></tr>
+          <tr><td class="row-label">AI 问数</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell m">M</td></tr>
+          <tr><td class="row-label">智能排班</td><td class="cell l">L</td><td class="cell m">M</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell m">M</td><td class="cell l">L</td></tr>
+          <tr><td class="row-label">精准营销</td><td class="cell m">M</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell m">M</td></tr>
+          <tr><td class="row-label">门店安全诊断</td><td class="cell h">H</td><td class="cell m">M</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell m">M</td><td class="cell l">L</td></tr>
+          <tr><td class="row-label">客服 / 对话</td><td class="cell h">H</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell l">L</td><td class="cell m">M</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="hm-take reveal reveal-4">
+      <span class="lbl">SO WHAT</span>
+      把 Gartner 的 <b>12 类用例</b>,放到我手里 —— 就是这 <b class="text-cyan">10 个场景</b>,每一个,都被<b>重做</b>过 —— 这就是<b style="color:var(--magenta)">颠覆</b>的样子。
+    </div>
+  </section>
+
   <!-- ============ Q1 · 低谷期价值 ============ -->
   <section class="slide gartner">
     <div class="g-head">
@@ -1332,28 +1484,6 @@
     </div>
   </section>
 
-  <!-- ============ Q3 · 三大焦虑 ============ -->
-  <section class="slide gartner">
-    <div class="g-head">
-      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 03</div>
-      <h2 class="title reveal reveal-2" style="margin-top:14px">高管 <em>到底在焦虑什么</em></h2>
-    </div>
-    <div class="g-body">
-      <div class="g-text">
-        <div class="g-bigword reveal reveal-3">现金流 · 能力 · 竞争力</div>
-        <div class="g-lead reveal reveal-4">
-          <b>"三个对话的存在,源于三大焦虑:现金流、能力、竞争力。"</b><br/>
-          这也是为什么 AI 不是技术议题 — 它是 <span class="cy">CEO 议题</span>。
-        </div>
-      </div>
-      <div class="image-card reveal reveal-4">
-        <span class="corner-l"></span><span class="corner-r"></span>
-        <span class="src-tag">GARTNER · 2026</span>
-        <img src="assets/gartner-3anxiety.png" alt="Three anxieties — Gartner 2026" />
-      </div>
-    </div>
-  </section>
-
   <!-- ============ Q4 · Decision Intelligence ============ -->
   <section class="slide gartner">
     <div class="g-head">
@@ -1373,74 +1503,6 @@
         <span class="corner-l"></span><span class="corner-r"></span>
         <span class="src-tag">GARTNER · 2026</span>
         <img src="assets/gartner-di-def.png" alt="Decision Intelligence definition — Gartner 2026" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Q5 · AI 装配线 ============ -->
-  <section class="slide gartner">
-    <div class="g-head">
-      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 05</div>
-      <h2 class="title reveal reveal-2" style="margin-top:14px">放大 <em>价值</em></h2>
-    </div>
-    <div class="g-body">
-      <div class="g-text">
-        <div class="g-bigword reveal reveal-3">构建 AI 装配线</div>
-        <div class="g-lead reveal reveal-4">
-          <b>"放大价值,需要构建 AI 装配线。"</b><br/>
-          从一次次的 PoC —— 到工业化产线。<br/>
-          AI 装配线 = 把"<span class="cy">试点</span>"变成"<span class="cy">流水线</span>"。
-        </div>
-      </div>
-      <div class="image-card reveal reveal-4">
-        <span class="corner-l"></span><span class="corner-r"></span>
-        <span class="src-tag">GARTNER · 2026</span>
-        <img src="assets/gartner-pipeline.png" alt="Build AI assembly line — Gartner 2026" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Q6 · 终结人工审批工厂 ============ -->
-  <section class="slide gartner">
-    <div class="g-head">
-      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 06</div>
-      <h2 class="title reveal reveal-2" style="margin-top:14px">夯实 <em>基础</em></h2>
-    </div>
-    <div class="g-body">
-      <div class="g-text">
-        <div class="g-bigword reveal reveal-3">终结"人工审批工厂"</div>
-        <div class="g-lead reveal reveal-4">
-          <b>"夯实基础,需要终结'人工审批工厂'。"</b><br/>
-          审批流、汇报流、巡检流 —— <br/>
-          一切被<span class="cy">"人当机器"</span>在做的事,都该让 AI 接走。
-        </div>
-      </div>
-      <div class="image-card reveal reveal-4">
-        <span class="corner-l"></span><span class="corner-r"></span>
-        <span class="src-tag">GARTNER · 2026</span>
-        <img src="assets/gartner-end-factory.png" alt="End manual approval factory — Gartner 2026" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Q7 · 规模化 ============ -->
-  <section class="slide gartner">
-    <div class="g-head">
-      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 07</div>
-      <h2 class="title reveal reveal-2" style="margin-top:14px">规模化 <em>的本质</em></h2>
-    </div>
-    <div class="g-body">
-      <div class="g-text">
-        <div class="g-bigword reveal reveal-3">积累过程资产</div>
-        <div class="g-lead reveal reveal-4">
-          <b>"规模化的本质,在于积累过程资产 —— <br/>
-          用以提升企业构建下一个用例的<span class="cy">速度、性价比、可靠性</span>。"</b>
-        </div>
-      </div>
-      <div class="image-card reveal reveal-4">
-        <span class="corner-l"></span><span class="corner-r"></span>
-        <span class="src-tag">GARTNER · 2026</span>
-        <img src="assets/gartner-scale.png" alt="Scaling = accumulating process assets — Gartner 2026" />
       </div>
     </div>
   </section>
@@ -1488,7 +1550,7 @@
     <h2 class="reveal reveal-2">
       未来十年,<br/>
       <span class="core">每一个场景</span><br/>
-      都值得被 AI <span class="core">重做一遍</span>。
+      都会被 AI <span class="core">颠覆一遍</span>。
     </h2>
     <div class="triplets">
       <div class="triplet reveal reveal-3">
@@ -1566,6 +1628,7 @@ function render() {
   slides.forEach((s, i) => {
     s.classList.toggle('active', i === current);
     s.classList.toggle('prev', i < current);
+    s.dataset.step = '0';
   });
   ticks.querySelectorAll('.tk').forEach((t, i) => {
     t.classList.toggle('active', i === current);
@@ -1579,8 +1642,16 @@ function goTo(i) {
   current = i;
   render();
 }
-function next() { goTo(Math.min(current + 1, total - 1)); }
-function prev() { goTo(Math.max(current - 1, 0)); }
+function maxStep() { return parseInt(slides[current].dataset.substeps || '0', 10); }
+function getStep() { return parseInt(slides[current].dataset.step || '0', 10); }
+function next() {
+  if (getStep() < maxStep()) { slides[current].dataset.step = String(getStep() + 1); return; }
+  goTo(Math.min(current + 1, total - 1));
+}
+function prev() {
+  if (getStep() > 0) { slides[current].dataset.step = String(getStep() - 1); return; }
+  goTo(Math.max(current - 1, 0));
+}
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'ArrowDown') { e.preventDefault(); next(); }
