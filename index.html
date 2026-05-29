@@ -16,7 +16,7 @@
     --ink-0: #eaf6ff;
     --ink-1: #cdd9ee;
     --ink-2: #93a2bf;
-    --ink-3: #56638a;
+    --ink-3: #7c8cb2;
     --cyan: #00f0ff;
     --cyan-soft: #6cf3ff;
     --magenta: #ff2bd6;
@@ -874,8 +874,8 @@
     font-family: "Orbitron", sans-serif; font-weight: 700;
     font-size: 110px; line-height: 1; color: var(--cyan);
     text-shadow: 0 0 32px rgba(0,240,255,.55), 0 0 80px rgba(0,240,255,.25);
-    animation: pulseQ 2s ease-in-out infinite;
   }
+  .slide.active .ae-card .ae-question .qmark { animation: pulseQ 2s ease-in-out infinite; }
   .ae-card.data .ae-question .qmark { color: var(--magenta); text-shadow: 0 0 32px rgba(255,43,214,.55), 0 0 80px rgba(255,43,214,.25); }
   .ae-card .ae-question .qlabel {
     font-family: "JetBrains Mono", monospace; font-size: 11px;
@@ -952,9 +952,9 @@
     background: linear-gradient(180deg, #fff 0%, var(--cyan) 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
     filter: drop-shadow(0 0 16px rgba(0,240,255,.25));
-    animation: floatWord 7s ease-in-out infinite alternate;
     transition: filter .25s, transform .25s; letter-spacing: -0.5px;
   }
+  .slide.active .fw-word { animation: floatWord 7s ease-in-out infinite alternate; }
   .fw-word.mg {
     background: linear-gradient(180deg, var(--magenta-soft) 0%, var(--magenta) 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
@@ -1286,6 +1286,56 @@
 
   /* A · count-up numbers use a subtle settle */
   .count { font-variant-numeric: tabular-nums; }
+
+  /* H · timeline — line draws left→right, dots pop in sequence */
+  .timeline-evo .te-line { transform-origin: left center; }
+  .timeline-evo.active .te-line { animation: lineDraw 1.5s cubic-bezier(.4,0,.2,1) .4s backwards; }
+  @keyframes lineDraw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .timeline-evo.active .te-node .te-dot { animation: dotPop .55s cubic-bezier(.2,1.5,.4,1) backwards; }
+  .timeline-evo.active .te-node:nth-child(1) .te-dot { animation-delay: .5s; }
+  .timeline-evo.active .te-node:nth-child(2) .te-dot { animation-delay: .72s; }
+  .timeline-evo.active .te-node:nth-child(3) .te-dot { animation-delay: .94s; }
+  .timeline-evo.active .te-node:nth-child(4) .te-dot { animation-delay: 1.16s; }
+  .timeline-evo.active .te-node:nth-child(5) .te-dot { animation-delay: 1.38s; }
+  .timeline-evo.active .te-node:nth-child(6) .te-dot { animation-delay: 1.6s; }
+  @keyframes dotPop { 0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.4); } 100% { transform: scale(1); opacity: 1; } }
+
+  /* I · π glyph — scale-in then slow breathing glow */
+  .pi.active .pi-glyph { animation: piIn .9s cubic-bezier(.2,.9,.3,1) .25s backwards, piGlow 3.6s ease-in-out 1.2s infinite; }
+  @keyframes piIn { from { opacity: 0; transform: scale(.45) rotate(-8deg); filter: blur(8px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  @keyframes piGlow {
+    0%,100% { text-shadow: 0 0 30px rgba(0,240,255,.55), 0 0 80px rgba(0,240,255,.3); }
+    50%     { text-shadow: 0 0 46px rgba(0,240,255,.9), 0 0 120px rgba(0,240,255,.5); }
+  }
+
+  /* J · radar image — rotating cyber scan beam */
+  .image-card.radar-scan::before {
+    content: ''; position: absolute; inset: 8px; z-index: 3; pointer-events: none;
+    background: conic-gradient(from 0deg, transparent 0deg, rgba(0,240,255,.28) 26deg, rgba(0,240,255,.05) 52deg, transparent 70deg);
+    mix-blend-mode: screen; transform-origin: center;
+  }
+  .slide.active .image-card.radar-scan::before { animation: radarSweep 4.5s linear infinite; }
+  @keyframes radarSweep { to { transform: rotate(360deg); } }
+
+  /* Accessibility — respect reduced-motion (also protects projectors from flicker) */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+    .cover .mega { -webkit-text-fill-color: var(--ink-0); color: var(--ink-0); }
+  }
+
+  /* Short-viewport safety (e.g. 1024×768 projectors) — keep dense slides from clipping */
+  @media (max-height: 820px) {
+    .slide { padding-top: 4vh; padding-bottom: 4vh; }
+    .hm-table { border-spacing: 3px; }
+    .hm-table td.cell { height: 26px; font-size: 11px; }
+    .hm-table td.row-label { font-size: 12px; }
+    .quotes.board .q-card { min-height: 166px; padding: 22px 16px 14px; }
+    .quotes.board .q-card .q-text { font-size: 14.5px; margin-top: 14px; }
+    .dp-stat { padding: 24px 20px 20px; }
+  }
 </style>
 </head>
 <body>
@@ -1870,7 +1920,7 @@
           <div class="dp"><div class="v">GAP</div><div class="k">理论 − 现实 = 机会</div></div>
         </div>
       </div>
-      <div class="image-card reveal reveal-4">
+      <div class="image-card radar-scan reveal reveal-4">
         <span class="corner-l"></span><span class="corner-r"></span>
         <span class="src-tag">ANTHROPIC · 2026.3</span>
         <img src="assets/anthropic-ai-coverage.jpg" alt="Theoretical vs observed AI coverage by occupation — Anthropic 2026" />
@@ -2044,6 +2094,7 @@ const ticks = document.getElementById('ticks');
 const pageNum = document.getElementById('page-num');
 let current = 0;
 const total = slides.length;
+const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -2074,29 +2125,29 @@ function render() {
 
 /* A · count-up · D · heatmap cell stagger */
 function onSlideEnter(slide) {
+  if (REDUCED_MOTION) return;
   // A — animate any .count numbers from 0 to target
   slide.querySelectorAll('.count').forEach(el => {
-    const to = parseFloat(el.dataset.to);
+    const to = parseFloat(el.dataset.to) || 0;
     const dec = parseInt(el.dataset.dec || '0', 10);
     const dur = 1100, t0 = performance.now();
-    (function step(now) {
+    requestAnimationFrame(function step(now) {
       const p = Math.min(1, (now - t0) / dur);
       const e = 1 - Math.pow(1 - p, 3); // easeOutCubic
       el.textContent = (to * e).toFixed(dec);
       if (p < 1) requestAnimationFrame(step); else el.textContent = to.toFixed(dec);
-    })(t0);
+    });
   });
-  // D — re-trigger heatmap cell wave with diagonal stagger
+  // D — re-trigger heatmap cell wave with diagonal stagger (driven fully inline so it replays on every entry)
   const cells = slide.querySelectorAll('.hm-table tbody .cell');
   if (cells.length) {
-    const cols = 6;
+    const head = slide.querySelector('.hm-table thead tr');
+    const cols = head ? head.querySelectorAll('th:not(.corner)').length : 6;
     cells.forEach((c, i) => {
       const r = Math.floor(i / cols), col = i % cols;
       c.style.animation = 'none';
-      // force reflow so the animation restarts each entry
-      void c.offsetWidth;
-      c.style.animation = '';
-      c.style.animationDelay = (0.25 + (r + col) * 0.04) + 's';
+      void c.offsetWidth; // force reflow so the animation restarts each entry
+      c.style.animation = 'cellIn .5s ease ' + (0.25 + (r + col) * 0.04).toFixed(2) + 's backwards';
     });
   }
 }
@@ -2215,7 +2266,7 @@ function loop() {
     ctx.arc(p.x, p.y, p.r * devicePixelRatio, 0, Math.PI * 2);
     ctx.fill();
   }
-  requestAnimationFrame(loop);
+  if (!REDUCED_MOTION) requestAnimationFrame(loop);
 }
 loop();
 </script>
