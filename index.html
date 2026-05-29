@@ -563,6 +563,83 @@
   .image-card .corner-l { top: -3px; left: -3px; border-top-width: 1px; border-left-width: 1px; }
   .image-card .corner-r { bottom: -3px; right: -3px; border-bottom-width: 1px; border-right-width: 1px; }
 
+  /* ============ Slide: 金句墙 (quotes) ============ */
+  .slide.quotes { justify-content: center; gap: 26px; }
+  .quotes .header { text-align: center; }
+  .quotes .q-grid {
+    width: 100%; max-width: 1300px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+  }
+  .q-card {
+    position: relative; padding: 30px 22px 22px;
+    border: 1px solid rgba(0,240,255,.18);
+    background: linear-gradient(180deg, rgba(0,240,255,.045), transparent);
+    display: flex; flex-direction: column; gap: 10px; min-height: 210px;
+    transition: transform .3s, border-color .3s;
+  }
+  .q-card:hover { transform: translateY(-4px); border-color: rgba(0,240,255,.45); }
+  .q-card.mg { border-color: rgba(255,43,214,.2); background: linear-gradient(180deg, rgba(255,43,214,.05), transparent); }
+  .q-card.mg:hover { border-color: rgba(255,43,214,.5); }
+  .q-card .mark {
+    position: absolute; top: 2px; left: 14px;
+    font-family: "Cormorant Garamond", serif; font-size: 70px; line-height: 1;
+    color: rgba(0,240,255,.20); pointer-events: none;
+  }
+  .q-card.mg .mark { color: rgba(255,43,214,.22); }
+  .q-card .q-text {
+    font-size: 18px; line-height: 1.55; color: var(--ink-0);
+    font-weight: 500; margin-top: 20px; z-index: 1;
+  }
+  .q-card .q-en {
+    font-size: 11.5px; line-height: 1.5; color: var(--ink-2);
+    font-style: italic; font-family: "Inter", sans-serif;
+  }
+  .q-card .q-by {
+    margin-top: auto; padding-top: 12px;
+    border-top: 1px dashed rgba(255,255,255,.09);
+  }
+  .q-card .q-by .nm { font-weight: 600; color: var(--cyan); font-size: 13px; }
+  .q-card.mg .q-by .nm { color: var(--magenta); }
+  .q-card .q-by .role {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    color: var(--ink-2); letter-spacing: 1px; margin-top: 3px;
+  }
+
+  /* ============ Slide: 行业数据佐证 (datapoints) ============ */
+  .slide.datapoints { justify-content: center; gap: 30px; }
+  .datapoints .header { text-align: center; }
+  .datapoints .dp-grid {
+    width: 100%; max-width: 1240px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  .dp-stat {
+    position: relative; padding: 34px 24px 26px;
+    border: 1px solid rgba(0,240,255,.2);
+    background: linear-gradient(180deg, rgba(0,240,255,.05), transparent);
+    text-align: center; overflow: hidden;
+    transition: transform .3s, border-color .3s;
+  }
+  .dp-stat:hover { transform: translateY(-4px); border-color: rgba(0,240,255,.45); }
+  .dp-stat .big {
+    font-family: "Orbitron", sans-serif; font-weight: 800;
+    font-size: clamp(40px, 5vw, 66px); line-height: 1;
+    background: linear-gradient(120deg, var(--cyan), var(--magenta));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .dp-stat .lab { margin-top: 14px; font-size: 15px; line-height: 1.5; color: var(--ink-1); }
+  .dp-stat .lab b { color: var(--ink-0); font-weight: 600; }
+  .dp-stat .src {
+    margin-top: 14px; font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 1px; color: var(--cyan);
+  }
+  .datapoints .dp-foot {
+    width: 100%; max-width: 1240px; text-align: center;
+    font-size: 16px; line-height: 1.7; color: var(--ink-1); font-weight: 300;
+  }
+  .datapoints .dp-foot b { color: var(--ink-0); font-weight: 600; }
+  .datapoints .dp-foot .cy { color: var(--cyan); font-weight: 600; }
+  .datapoints .dp-foot .mg { color: var(--magenta); font-weight: 600; }
+
   /* ============ Slide: AI 三要素 ============ */
   .slide.ai-elements { justify-content: center; gap: 28px; }
   .ai-elements .header { text-align: center; }
@@ -1535,6 +1612,53 @@
     </div>
   </section>
 
+  <!-- ============ 3f · 金句墙 — 行业声音 ============ -->
+  <section class="slide quotes">
+    <div class="header">
+      <div class="eyebrow center reveal reveal-1">VOICES · 行业声音</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">站在最前沿的人，<em>怎么说</em></h2>
+      <h3 class="sub reveal reveal-3" style="margin-top:10px;font-size:14px;color:var(--ink-2)">不是我一个人的判断 — 这是<span style="color:var(--cyan)">整个行业的共识</span></h3>
+    </div>
+    <div class="q-grid reveal reveal-4">
+      <div class="q-card">
+        <span class="mark">“</span>
+        <div class="q-text">软件吞噬世界，<br/>而 AI，将吞噬软件。</div>
+        <div class="q-en">Software is eating the world, but AI is going to eat software.</div>
+        <div class="q-by"><div class="nm">黄仁勋 Jensen Huang</div><div class="role">NVIDIA · CEO</div></div>
+      </div>
+      <div class="q-card">
+        <span class="mark">“</span>
+        <div class="q-text">最热门的新编程语言，<br/>是<b style="color:var(--cyan)">英语</b>。</div>
+        <div class="q-en">The hottest new programming language is English.</div>
+        <div class="q-by"><div class="nm">Andrej Karpathy</div><div class="role">EX-OPENAI / TESLA AI</div></div>
+      </div>
+      <div class="q-card mg">
+        <span class="mark">“</span>
+        <div class="q-text">软件正在被重写：<br/>写指令 → 喂数据 → <b style="color:var(--magenta)">给意图</b>。</div>
+        <div class="q-en">Software 1.0 → 2.0 → 3.0. We program in natural language now.</div>
+        <div class="q-by"><div class="nm">Andrej Karpathy</div><div class="role">SOFTWARE 3.0 · 2025</div></div>
+      </div>
+      <div class="q-card mg">
+        <span class="mark">“</span>
+        <div class="q-text">AI 正在成为<br/>整个经济的<b style="color:var(--magenta)">执行层</b>。</div>
+        <div class="q-en">AI is becoming the execution layer of the economy.</div>
+        <div class="q-by"><div class="nm">a16z · Big Ideas 2026</div><div class="role">ANDREESSEN HOROWITZ</div></div>
+      </div>
+      <div class="q-card">
+        <span class="mark">“</span>
+        <div class="q-text">可能无限，<br/><b style="color:var(--cyan)">信任惟先</b>。</div>
+        <div class="q-en">Boundless possibility — but trust comes first.</div>
+        <div class="q-by"><div class="nm">埃森哲 Accenture</div><div class="role">技术展望 2025 · AI 自主宣言</div></div>
+      </div>
+      <div class="q-card mg">
+        <span class="mark">“</span>
+        <div class="q-text">我们基本上，<br/>在把整个地球<b style="color:var(--magenta)">粘在一起</b>。</div>
+        <div class="q-en">We're basically holding the planet together — and it's not untrue.</div>
+        <div class="q-by"><div class="nm">黄仁勋 Jensen Huang</div><div class="role">NVIDIA 全员会 · 2025</div></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ 4 · Thesis ============ -->
   <section class="slide thesis brackets">
     <span class="br-bl"></span><span class="br-br"></span>
@@ -1693,6 +1817,47 @@
     <div class="hm-take reveal reveal-4">
       <span class="lbl">SO WHAT</span>
       把 Gartner 的 <b>12 类用例</b>,放到我手里 —— 就是这 <b class="text-cyan">10 个场景</b>,每一个,都被<b>重做</b>过 —— 这就是<b style="color:var(--magenta)">颠覆</b>的样子。
+    </div>
+  </section>
+
+  <!-- ============ 6b · 行业数据佐证 ============ -->
+  <section class="slide datapoints">
+    <div class="header">
+      <div class="eyebrow center reveal reveal-1">INDUSTRY DATA · 行业数据</div>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">不是炒作 —— <em>数据在说话</em></h2>
+      <h3 class="sub reveal reveal-3" style="margin-top:10px;font-size:14px;color:var(--ink-2)">采用已经普及 · 但<span style="color:var(--cyan)">真正落地价值</span>的，仍是少数</h3>
+    </div>
+    <div class="dp-grid reveal reveal-4">
+      <div class="dp-stat">
+        <div class="big">88%</div>
+        <div class="lab">企业已在<b>至少一个业务环节</b>用上 AI</div>
+        <div class="src">SOURCE · MCKINSEY 2025</div>
+      </div>
+      <div class="dp-stat">
+        <div class="big">5.5%</div>
+        <div class="lab">却<b>只有这么少</b>真正看到<b>财务回报</b></div>
+        <div class="src">SOURCE · MCKINSEY 2025</div>
+      </div>
+      <div class="dp-stat">
+        <div class="big">280<span style="font-size:.5em">×</span></div>
+        <div class="lab">同等能力模型<b>推理成本</b>，两年跌去</div>
+        <div class="src">SOURCE · STANFORD HAI 2025</div>
+      </div>
+    </div>
+    <div class="dp-grid reveal reveal-5" style="max-width:1240px;grid-template-columns:repeat(2,1fr);">
+      <div class="dp-stat">
+        <div class="big">55% → 78%</div>
+        <div class="lab">一年内，组织级 AI 使用率<b>跨越式上升</b></div>
+        <div class="src">SOURCE · STANFORD HAI 2025</div>
+      </div>
+      <div class="dp-stat">
+        <div class="big">4.4% → 71.7%</div>
+        <div class="lab">AI 解真实<b>工程问题</b>的能力，<b>一年</b>的跃迁</div>
+        <div class="src">SOURCE · STANFORD HAI · SWE-BENCH</div>
+      </div>
+    </div>
+    <div class="dp-foot reveal reveal-5">
+      // 人人都在用，<span class="cy">少数人真正重构</span> —— 这中间的差距，就是 <span class="mg">机会</span>。
     </div>
   </section>
 
