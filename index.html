@@ -112,6 +112,12 @@
   .chrome-bottom .ticks .tk.active { background: var(--cyan); opacity: 1; height: 3px; box-shadow: 0 0 8px var(--cyan); }
   .chrome-bottom .ticks .tk.done { background: var(--cyan); opacity: 0.55; }
   .chrome-bottom .hint { color: var(--ink-3); font-size: 9.5px; }
+  .chrome-bottom #page-num {
+    font-family: "Orbitron", sans-serif; font-size: 16px; font-weight: 700;
+    color: var(--cyan); letter-spacing: 2px; opacity: .95;
+    text-shadow: 0 0 10px rgba(0,240,255,.4);
+  }
+  .chrome-bottom #page-num b { color: var(--ink-2); font-weight: 400; }
   .chrome-bottom .hint kbd {
     color: var(--cyan-soft); border: 1px solid rgba(0,240,255,0.3);
     padding: 1px 5px; border-radius: 3px; font-family: "JetBrains Mono", monospace;
@@ -604,6 +610,17 @@
     font-family: "JetBrains Mono", monospace; font-size: 10px;
     color: var(--ink-2); letter-spacing: 1px; margin-top: 3px;
   }
+  /* dense 4-column "different voices" board */
+  .quotes.board .q-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .quotes.board .q-card { padding: 26px 18px 18px; min-height: 196px; gap: 8px; }
+  .quotes.board .q-card .q-text { font-size: 15.5px; line-height: 1.5; margin-top: 16px; }
+  .quotes.board .q-card .q-en { font-size: 10.5px; }
+  .quotes.board .q-card .mark { font-size: 58px; }
+  /* open-question cards — dashed border + "?" mark signals discussion */
+  .q-card.ask { border-style: dashed; }
+  .q-card.ask .mark { font-family: "Inter", sans-serif; font-weight: 800; }
+  .q-card.ask .q-text { color: var(--ink-0); }
+  .q-card.ask .q-sub { font-size: 12px; line-height: 1.5; color: var(--ink-2); }
 
   /* ============ Slide: 行业数据佐证 (datapoints) ============ */
   .slide.datapoints { justify-content: center; gap: 30px; }
@@ -1270,8 +1287,7 @@
       而在它<span class="key">背后做决策的 AI</span> 上。
     </div>
     <div class="footnote reveal reveal-3">
-      // 机器人是"执行"，AI 是"重构" — 这不是提效，是一次<b style="color:var(--magenta)">行业级的颠覆</b>。<br/>
-      // 接下来 15 分钟，我讲讲怎么把每一个场景重做一遍。
+      // 机器人是"执行"，AI 是"重构" — 这不是提效，是一次<b style="color:var(--magenta)">行业级的颠覆</b>。
     </div>
   </section>
 
@@ -1363,7 +1379,7 @@
         <div class="pi-tagline">π-SHAPED EXPERT</div>
         <div class="pi-bio">
           跨 <b class="cy">10 大行业</b>,在 <b class="cy">大数据</b> 与 <b class="mg">AI</b><br/>
-          两条专业线上 <b>15+ 年</b> 深耕。
+          两条专业线上 <b>近 20 年</b> 深耕。
         </div>
       </div>
     </div>
@@ -1435,34 +1451,6 @@
         <span class="corner-l"></span><span class="corner-r"></span>
         <span class="src-tag">GARTNER · 2026</span>
         <img src="assets/gartner-gpt2.png" alt="GPT-2 moment of robotics — Gartner 2026" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ 3b · 机器人的"大脑" 五代演进 ============ -->
-  <section class="slide gartner">
-    <div class="g-head">
-      <div class="eyebrow reveal reveal-1">EVOLUTION · 大脑五代演进</div>
-      <h2 class="title reveal reveal-2" style="margin-top:14px">机器人是 手 — <em>AI 是脑</em></h2>
-    </div>
-    <div class="g-body">
-      <div class="g-text">
-        <div class="g-lead reveal reveal-3">
-          机器人的"大脑"<b>经历了五代进化</b>:<br/>
-          从 1961 年的<b>可编程执行器</b>,<br/>
-          一路走到能看、能想、能动手的 <span class="cy">VLA 大模型时代</span>。
-        </div>
-        <div class="g-datarow reveal reveal-4">
-          <div class="dp"><div class="v">1961</div><div class="k">可编程机器人</div></div>
-          <div class="dp"><div class="v">2010</div><div class="k">模仿学习 · Google Brain</div></div>
-          <div class="dp"><div class="v">2016</div><div class="k">强化学习 · AlphaGo Zero</div></div>
-          <div class="dp"><div class="v">2023+</div><div class="k">VLA 大模型时代</div></div>
-        </div>
-      </div>
-      <div class="image-card reveal reveal-4">
-        <span class="corner-l"></span><span class="corner-r"></span>
-        <span class="src-tag">GARTNER · 2026</span>
-        <img src="assets/gartner-evolution.png" alt="Five generations of robot brain — Gartner 2026" />
       </div>
     </div>
   </section>
@@ -1612,12 +1600,12 @@
     </div>
   </section>
 
-  <!-- ============ 3f · 金句墙 — 行业声音 ============ -->
-  <section class="slide quotes">
+  <!-- ============ 3f · 金句墙 — 行业声音 / 不同声音 ============ -->
+  <section class="slide quotes board">
     <div class="header">
       <div class="eyebrow center reveal reveal-1">VOICES · 行业声音</div>
-      <h2 class="title reveal reveal-2" style="margin-top:14px">站在最前沿的人，<em>怎么说</em></h2>
-      <h3 class="sub reveal reveal-3" style="margin-top:10px;font-size:14px;color:var(--ink-2)">不是我一个人的判断 — 这是<span style="color:var(--cyan)">整个行业的共识</span></h3>
+      <h2 class="title reveal reveal-2" style="margin-top:14px">行业上，<em>大家怎么说？</em></h2>
+      <h3 class="sub reveal reveal-3" style="margin-top:10px;font-size:14px;color:var(--ink-2)">听听<span style="color:var(--cyan)">不同的声音</span> —— 包括相反的判断</h3>
     </div>
     <div class="q-grid reveal reveal-4">
       <div class="q-card">
@@ -1634,12 +1622,6 @@
       </div>
       <div class="q-card mg">
         <span class="mark">“</span>
-        <div class="q-text">软件正在被重写：<br/>写指令 → 喂数据 → <b style="color:var(--magenta)">给意图</b>。</div>
-        <div class="q-en">Software 1.0 → 2.0 → 3.0. We program in natural language now.</div>
-        <div class="q-by"><div class="nm">Andrej Karpathy</div><div class="role">SOFTWARE 3.0 · 2025</div></div>
-      </div>
-      <div class="q-card mg">
-        <span class="mark">“</span>
         <div class="q-text">AI 正在成为<br/>整个经济的<b style="color:var(--magenta)">执行层</b>。</div>
         <div class="q-en">AI is becoming the execution layer of the economy.</div>
         <div class="q-by"><div class="nm">a16z · Big Ideas 2026</div><div class="role">ANDREESSEN HOROWITZ</div></div>
@@ -1652,9 +1634,27 @@
       </div>
       <div class="q-card mg">
         <span class="mark">“</span>
-        <div class="q-text">我们基本上，<br/>在把整个地球<b style="color:var(--magenta)">粘在一起</b>。</div>
-        <div class="q-en">We're basically holding the planet together — and it's not untrue.</div>
-        <div class="q-by"><div class="nm">黄仁勋 Jensen Huang</div><div class="role">NVIDIA 全员会 · 2025</div></div>
+        <div class="q-text">未来 5–20 年，约有<br/><b style="color:var(--magenta)">一半概率</b>，AI 会比我们更聪明。</div>
+        <div class="q-en">A ~50% chance of AI smarter than us within 5–20 years.</div>
+        <div class="q-by"><div class="nm">Geoffrey Hinton</div><div class="role">深度学习之父 · 2024 诺奖 · 警示风险</div></div>
+      </div>
+      <div class="q-card">
+        <span class="mark">“</span>
+        <div class="q-text">今天的 AI，<br/>还<b style="color:var(--cyan)">不如一只猫</b>聪明。</div>
+        <div class="q-en">Today's AI is dumber than a house cat.</div>
+        <div class="q-by"><div class="nm">Yann LeCun</div><div class="role">META 首席 AI 科学家 · 图灵奖</div></div>
+      </div>
+      <div class="q-card ask mg">
+        <span class="mark">?</span>
+        <div class="q-text">AI 会<b style="color:var(--magenta)">取代</b>人，<br/>还是<b style="color:var(--magenta)">放大</b>人？</div>
+        <div class="q-sub">一种声音说「智能体 ≠ 人，不会取代员工」；另一种说「不用 AI 的人，会被用 AI 的人取代」。</div>
+        <div class="q-by"><div class="nm">开放讨论 · OPEN DEBATE</div><div class="role">你怎么看？</div></div>
+      </div>
+      <div class="q-card ask">
+        <span class="mark">?</span>
+        <div class="q-text">当 AI 比我们<b style="color:var(--cyan)">更会决策</b>，<br/>谁来负责？</div>
+        <div class="q-sub">效率、偏见、责任、就业 —— AI 伦理，没有标准答案，但绕不开。</div>
+        <div class="q-by"><div class="nm">开放讨论 · AI ETHICS</div><div class="role">边界在哪里？</div></div>
       </div>
     </div>
   </section>
@@ -1816,7 +1816,7 @@
     </div>
     <div class="hm-take reveal reveal-4">
       <span class="lbl">SO WHAT</span>
-      把 Gartner 的 <b>12 类用例</b>,放到我手里 —— 就是这 <b class="text-cyan">10 个场景</b>,每一个,都被<b>重做</b>过 —— 这就是<b style="color:var(--magenta)">颠覆</b>的样子。
+      把 Gartner 的 <b>12 类用例</b>,对照我自己跑过的行业 —— 这里挑了 <b class="text-cyan">部分真实落地</b> 的场景,拼成这张实战版热力图,和上一页的"理论图"<b>互为参照</b>。
     </div>
   </section>
 
@@ -1864,7 +1864,7 @@
   <!-- ============ Q1 · 低谷期价值 ============ -->
   <section class="slide gartner">
     <div class="g-head">
-      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 01</div>
+      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音</div>
       <h2 class="title reveal reveal-2" style="margin-top:14px">热潮 <em>退去之后</em></h2>
     </div>
     <div class="g-body">
@@ -1879,52 +1879,6 @@
         <span class="corner-l"></span><span class="corner-r"></span>
         <span class="src-tag">GARTNER · 2026</span>
         <img src="assets/gartner-trough.png" alt="The real value comes in the trough — Gartner 2026" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Q2 · 智能体不取代人 ============ -->
-  <section class="slide gartner">
-    <div class="g-head">
-      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 02</div>
-      <h2 class="title reveal reveal-2" style="margin-top:14px">人 vs <em>智能体</em></h2>
-    </div>
-    <div class="g-body">
-      <div class="g-text">
-        <div class="g-bigword reveal reveal-3">智能体 ≠ 人</div>
-        <div class="g-lead reveal reveal-4">
-          <b>"智能体不会取代人类员工 — 智能体与人类完全不同。"</b><br/>
-          机器人扩展<span class="cy">手</span>,AI 扩展<span class="cy">脑</span> ——<br/>
-          人,仍然是<b>意图与价值</b>的来源。
-        </div>
-      </div>
-      <div class="image-card reveal reveal-4">
-        <span class="corner-l"></span><span class="corner-r"></span>
-        <span class="src-tag">GARTNER · 2026</span>
-        <img src="assets/gartner-agent-human.png" alt="Agents will not replace humans — Gartner 2026" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Q4 · Decision Intelligence ============ -->
-  <section class="slide gartner">
-    <div class="g-head">
-      <div class="eyebrow reveal reveal-1">GARTNER · 行业声音 04</div>
-      <h2 class="title reveal reveal-2" style="margin-top:14px">方法论的 <em>名字</em></h2>
-    </div>
-    <div class="g-body">
-      <div class="g-text">
-        <div class="g-bigword reveal reveal-3">Decision<br/>Intelligence</div>
-        <div class="g-lead reveal reveal-4">
-          Gartner 把"用 AI 重塑决策"称为 <b>决策智能</b> ——<br/>
-          一门 <span class="cy">提升决策质量</span> 的实践学科。<br/>
-          我接下来要讲的"<b>场景重构</b>",就是它的落地。
-        </div>
-      </div>
-      <div class="image-card reveal reveal-4">
-        <span class="corner-l"></span><span class="corner-r"></span>
-        <span class="src-tag">GARTNER · 2026</span>
-        <img src="assets/gartner-di-def.png" alt="Decision Intelligence definition — Gartner 2026" />
       </div>
     </div>
   </section>
@@ -1971,8 +1925,8 @@
     <div class="eyebrow center reveal reveal-1">CLOSING THOUGHT · 收 束</div>
     <h2 class="reveal reveal-2">
       未来十年,<br/>
-      <span class="core">每一个场景</span><br/>
-      都会被 AI <span class="core">颠覆一遍</span>。
+      是不是 <span class="core">每一个场景</span><br/>
+      都会被 AI <span class="core">颠覆一遍</span>？
     </h2>
     <div class="triplets">
       <div class="triplet reveal reveal-3">
@@ -2007,8 +1961,8 @@
       <div class="sep"></div>
       <div class="col right reveal reveal-4">
         <div class="k">▸ EXPERIENCE</div>
-        <div class="v">15+ 年 · 数据与 AI</div>
-        <div class="sub">10 行业 · 大数据 × AI · 15+ 年深耕</div>
+        <div class="v">近 20 年 · 数据与 AI</div>
+        <div class="sub">10 行业 · 大数据 × AI · 近 20 年深耕</div>
       </div>
     </div>
     <div class="qa reveal reveal-5">Q &amp; A · 提 问 时 间 <span>_</span></div>
@@ -2056,7 +2010,7 @@ function render() {
     t.classList.toggle('active', i === current);
     t.classList.toggle('done', i < current);
   });
-  pageNum.textContent = `${pad(current + 1)} / ${pad(total)}`;
+  pageNum.innerHTML = `${pad(current + 1)} <b>/ ${pad(total)}</b>`;
 }
 
 function goTo(i) {
