@@ -1230,6 +1230,62 @@
     .framework .flow { grid-template-columns: 1fr; }
     .framework .arrow { transform: rotate(90deg); padding: 8px 0; }
   }
+
+  /* ============ Slide-enter flourishes (A–G) ============ */
+
+  /* F · cover title sheen sweep */
+  .cover .mega {
+    background: linear-gradient(100deg, var(--ink-0) 38%, var(--cyan) 50%, var(--ink-0) 62%);
+    background-size: 280% 100%; background-position: 120% 0;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .cover.active .mega { animation: titleSheen 2.4s cubic-bezier(.4,0,.2,1) .5s 1 forwards; }
+  @keyframes titleSheen { from { background-position: 120% 0; } to { background-position: -40% 0; } }
+
+  /* E · thesis equation assemble + AI glow */
+  .thesis.active .equation .word { animation: wordIn .6s cubic-bezier(.2,.8,.3,1) backwards; }
+  .thesis.active .equation .word.smart { animation-delay: .35s; }
+  .thesis.active .equation .word.eq    { animation-delay: .6s; }
+  .thesis.active .equation .word.ai    { animation: wordIn .6s cubic-bezier(.2,.8,.3,1) .9s backwards, aiGlow 2.6s ease-in-out 1.6s infinite; }
+  @keyframes wordIn { from { opacity: 0; transform: translateY(22px) scale(.82); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  @keyframes aiGlow { 0%,100% { text-shadow: 0 0 6px rgba(0,240,255,.25); } 50% { text-shadow: 0 0 30px rgba(0,240,255,.85), 0 0 60px rgba(0,240,255,.4); } }
+
+  /* C · capability icons — color + float + glow */
+  .caps .cap-card.reveal-3 .icon { color: var(--cyan); }
+  .caps .cap-card.reveal-4 .icon { color: var(--magenta); }
+  .caps .cap-card.reveal-5 .icon { color: var(--lime); }
+  .caps.active .cap-card .icon { animation: iconFloat 3.4s ease-in-out infinite, iconGlow 2.6s ease-in-out infinite; will-change: transform; }
+  .caps.active .cap-card.reveal-4 .icon { animation-delay: .5s, .4s; }
+  .caps.active .cap-card.reveal-5 .icon { animation-delay: 1s, .8s; }
+  @keyframes iconFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+  @keyframes iconGlow { 0%,100% { text-shadow: 0 0 8px currentColor; opacity: .82; } 50% { text-shadow: 0 0 26px currentColor; opacity: 1; } }
+
+  /* B · framework steps light-up + arrows flow */
+  .framework.active .step-card.reveal-3 { animation: stepLight 1.7s ease .5s 1; }
+  .framework.active .step-card.reveal-4 { animation: stepLight 1.7s ease 1.15s 1; }
+  .framework.active .step-card.reveal-5 { animation: stepLight 1.7s ease 1.8s 1; }
+  @keyframes stepLight {
+    0%   { box-shadow: 0 0 0 rgba(0,240,255,0); }
+    35%  { box-shadow: 0 0 26px rgba(0,240,255,.45); border-color: var(--cyan); }
+    100% { box-shadow: 0 0 0 rgba(0,240,255,0); }
+  }
+  .framework.active .flow .arrow { animation: arrowFlow 1.7s ease-in-out infinite; }
+  .framework.active .flow .arrow:nth-child(4) { animation-delay: .85s; }
+  @keyframes arrowFlow {
+    0%,100% { opacity: .3; transform: translateX(0); color: var(--ink-2); }
+    50%     { opacity: 1; transform: translateX(7px); color: var(--cyan); text-shadow: 0 0 14px var(--cyan); }
+  }
+
+  /* G · quote-board open-question "?" pulse */
+  .quotes.active .q-card.ask .mark { animation: askPulse 2.1s ease-in-out infinite; transform-origin: center; }
+  @keyframes askPulse { 0%,100% { transform: scale(1); opacity: .55; } 50% { transform: scale(1.18); opacity: 1; } }
+
+  /* D · heatmap cells stagger-in (delay set inline by JS) */
+  .heatmap.active .hm-table tbody .cell { animation: cellIn .5s ease backwards; }
+  @keyframes cellIn { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
+
+  /* A · count-up numbers use a subtle settle */
+  .count { font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
@@ -1831,17 +1887,17 @@
     </div>
     <div class="dp-grid reveal reveal-4">
       <div class="dp-stat">
-        <div class="big">88%</div>
+        <div class="big"><span class="count" data-to="88" data-dec="0">0</span>%</div>
         <div class="lab">企业已在<b>至少一个业务环节</b>用上 AI</div>
         <div class="src">SOURCE · MCKINSEY 2025</div>
       </div>
       <div class="dp-stat">
-        <div class="big">5.5%</div>
+        <div class="big"><span class="count" data-to="5.5" data-dec="1">0</span>%</div>
         <div class="lab">却<b>只有这么少</b>真正看到<b>财务回报</b></div>
         <div class="src">SOURCE · MCKINSEY 2025</div>
       </div>
       <div class="dp-stat">
-        <div class="big">280<span style="font-size:.5em">×</span></div>
+        <div class="big"><span class="count" data-to="280" data-dec="0">0</span><span style="font-size:.5em">×</span></div>
         <div class="lab">同等能力模型<b>推理成本</b>，两年跌去</div>
         <div class="src">SOURCE · STANFORD HAI 2025</div>
       </div>
@@ -2013,6 +2069,36 @@ function render() {
     t.classList.toggle('done', i < current);
   });
   pageNum.innerHTML = `${pad(current + 1)} <b>/ ${pad(total)}</b>`;
+  onSlideEnter(slides[current]);
+}
+
+/* A · count-up · D · heatmap cell stagger */
+function onSlideEnter(slide) {
+  // A — animate any .count numbers from 0 to target
+  slide.querySelectorAll('.count').forEach(el => {
+    const to = parseFloat(el.dataset.to);
+    const dec = parseInt(el.dataset.dec || '0', 10);
+    const dur = 1100, t0 = performance.now();
+    (function step(now) {
+      const p = Math.min(1, (now - t0) / dur);
+      const e = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      el.textContent = (to * e).toFixed(dec);
+      if (p < 1) requestAnimationFrame(step); else el.textContent = to.toFixed(dec);
+    })(t0);
+  });
+  // D — re-trigger heatmap cell wave with diagonal stagger
+  const cells = slide.querySelectorAll('.hm-table tbody .cell');
+  if (cells.length) {
+    const cols = 6;
+    cells.forEach((c, i) => {
+      const r = Math.floor(i / cols), col = i % cols;
+      c.style.animation = 'none';
+      // force reflow so the animation restarts each entry
+      void c.offsetWidth;
+      c.style.animation = '';
+      c.style.animationDelay = (0.25 + (r + col) * 0.04) + 's';
+    });
+  }
 }
 
 function goTo(i) {
